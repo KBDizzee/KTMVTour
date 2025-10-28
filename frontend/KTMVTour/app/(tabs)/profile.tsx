@@ -10,7 +10,6 @@ import React, { useState } from "react";
 import { useAuthStore } from "@/src/store/auth.store";
 import { getItem, removeItem } from "@/src/store/storage";
 import { LinearGradient } from "expo-linear-gradient";
-import { User } from "lucide-react-native";
 import BasicInfoSection from "../../components/profile/basic-info.section";
 import RecentActivitySection from "../../components/profile/recent-activity.section";
 import { Camera } from "lucide-react-native";
@@ -61,7 +60,7 @@ const profile = () => {
           {/* Profile Picture (Positioned inside gradient) */}
           <View className="absolute left-[5%] bottom-[-55px] bg-third rounded-full z-10 border-[1px] border-border">
             {pfp? <Image
-              source={require("@/assets/sample-images/form-bg.png")}
+              source={require("get the profile picture uri string here")}
               style={{
                 width: 100,
                 height: 100,

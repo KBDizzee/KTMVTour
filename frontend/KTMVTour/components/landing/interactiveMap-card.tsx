@@ -2,6 +2,7 @@ import { Map, MapPin } from "lucide-react-native";
 import { View, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
+import { AppleMaps, GoogleMaps } from 'expo-maps';
 
 const InteractiveMapCard = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +35,15 @@ const InteractiveMapCard = () => {
           </View>
         </LinearGradient>
       ) : (
-        <View className="w-full h-[200px]  flex items-center justify-center rounded-t-2xl"></View>
+        <View className="w-full h-[200px]  flex items-center justify-center rounded-t-2xl">
+          if (Platform.OS === 'ios') {
+          <AppleMaps.View/>
+        } else if (Platform.OS === 'android') {
+          <GoogleMaps.View/>
+        } else {
+          <Text className="text-secondary text-center">Maps are only available on Android and iOS</Text>
+        }
+        </View>
       )}
 
       {/* Listing nearby landmarks with distance */}
