@@ -5,10 +5,13 @@ export interface JWTPayload{
   _id: Schema.Types.ObjectId,
   email:string,
   username:string,
-  profilePicture?:string | null
+  profilePicture?:{
+    path?:string | null,
+    public_id?:string | null,
+  } | null
 }
 
 export interface JWTDecodedPayload extends JWTPayload{
-  exp:number,
+  readonly exp:number,
   iat:number
 }

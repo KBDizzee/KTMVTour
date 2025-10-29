@@ -18,8 +18,8 @@ export const updateProfile = async (
       throw new CustomError(`User not found`, 400);
     }
 
-    const { username, email, password } = req.body;
-    const updatedInfo = { username, email, password };
+    const { username, email, password, profilePicture } = req.body;
+    const updatedInfo = { username, email, password,profilePicture };
 
     if (password) {
       if (password.length < 8) {
