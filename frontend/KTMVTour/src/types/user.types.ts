@@ -3,5 +3,5 @@ export interface IUser{
   username?:string,
   password?:string,
   email?:string,
-  profilePicture?:File
+  profilePicture?:any
 }
