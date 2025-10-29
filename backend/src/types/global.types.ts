@@ -6,8 +6,8 @@ export interface JWTPayload{
   email:string,
   username:string,
   profilePicture?:{
-    path?:string | null,
-    public_id?:string | null,
+    path:string,
+    public_id:string,
   } | null
 }
 

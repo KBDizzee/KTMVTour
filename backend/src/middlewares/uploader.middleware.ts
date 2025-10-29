@@ -2,6 +2,7 @@ import multer from 'multer'
 import fs from 'fs'
 import path from 'path'
 import { Request } from 'express'
+import CustomError from './error-handler.middleware'
 
 
 export const uploader = ()=>{
@@ -19,8 +20,8 @@ export const uploader = ()=>{
       cb(null,destination)
     },
     filename: function(req,file,cb){
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random())
-      cb(null,file.fieldname + '-' + uniqueSuffix)
+      const uniqueName = Date.now() + '-' + file.originalname
+      cb(null,uniqueName)
     }
   })
   const fileSize = 5*1024*1024
@@ -34,11 +35,11 @@ export const uploader = ()=>{
     if (allowedExtensions.includes(ext)){
       cb(null,true)
     } else{
-      cb(new Error(`Invalid File Format. Please select either jpg,jpeg,png,webp,gif or avif.`))
+      cb(new CustomError(`File Format ${ext} not allowed.`,400))
     }
   }
 
 
-  const upload = multer({limits:{fileSize},storage,fileFilter})
+  const upload = multer({storage:storage,limits:{fileSize},fileFilter})
   return upload
 }
