@@ -12,6 +12,7 @@ interface Types {
 
 const ChangePictureOptions = ({setPfp, setChangePfpClicked }: Types) => {
   const handleTakePhotos = async () => {
+    console.log(`Function loaded`)
     try {
       await ImagePicker.requestCameraPermissionsAsync();
       let result = await ImagePicker.launchCameraAsync({

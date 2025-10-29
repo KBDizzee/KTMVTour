@@ -14,6 +14,7 @@ import BasicInfoSection from "../../components/profile/basic-info.section";
 import RecentActivitySection from "../../components/profile/recent-activity.section";
 import { Camera } from "lucide-react-native";
 import ChangePictureOptions from "@/components/profile/change-pfp.options";
+import { Modal } from "react-native";
 
 const profile = () => {
   const { logout } = useAuthStore();
@@ -41,6 +42,7 @@ const profile = () => {
   };
 
   return (
+    <>
     <ScrollView
       bounces={false}
       showsVerticalScrollIndicator={false}
@@ -86,23 +88,6 @@ const profile = () => {
             )}
           </View>
         </View>
-
-        {/* options to change/delete pfp */}
-        {changePfpClicked && (
-          <Pressable
-            className="bg-black/50 inset-0 absolute z-50 items-center justify-center "
-            onPress={handleExitPfpClick}
-          >
-            <Pressable onPress={(e) => e.stopPropagation()}>
-              <ChangePictureOptions
-                pfp={pfp}
-                setPfp={setPfp}
-                setChangePfpClicked={setChangePfpClicked}
-                ChangePfpClicked={changePfpClicked}
-              />
-            </Pressable>
-          </Pressable>
-        )}
 
         {/* Content section {below header} */}
         <View className="mt-16">
@@ -150,6 +135,29 @@ const profile = () => {
         </View>
       </View>
     </ScrollView>
+
+    {/* Modal for changing profile picture - OUTSIDE ScrollView */}
+      <Modal
+        visible={changePfpClicked}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={handleExitPfpClick}
+      >
+        <Pressable
+          className="flex-1 bg-black/50 items-center justify-center"
+          onPress={handleExitPfpClick}
+        >
+          <Pressable onPress={(e) => e.stopPropagation()}>
+            <ChangePictureOptions
+              pfp={pfp}
+              setPfp={setPfp}
+              setChangePfpClicked={setChangePfpClicked}
+              ChangePfpClicked={changePfpClicked}
+            />
+          </Pressable>
+        </Pressable>
+      </Modal>
+    </>
   );
 };
 
