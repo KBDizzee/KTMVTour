@@ -1087,3 +1087,38 @@ const BasicInfoSection = ({isEditing,setIsEditing}: stateTypes) => {
 we're going to have to use expo maps instead 🤷‍♂️.
 
 - Ok, im on the profile picture part again and I need to rebuild my app again now. Whilst that's going I'll just go through some typescript video or do one of my assessments. Anyways, I think I will have to build again after I import expo maps, so I'll add expo maps then rebuild so I don't have to rebuild later.
+
+## 29 OCT 25
+
+- So I added this "debug" log to test if the function on here was being called at all when we clicked the button:
+```TypeScript
+const handleTakePhotos = async () => {
+    console.log(`Function loaded`)
+    try {
+      await ImagePicker.requestCameraPermissionsAsync();
+      let result = await ImagePicker.launchCameraAsync({
+        cameraType: ImagePicker.CameraType.front,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        await saveImage(result.assets[0].uri);
+      }
+    } catch (err: any) {
+      alert("Error uploading image:" + err.message)
+      setChangePfpClicked(false)
+    }
+  };
+```
+
+- When I click the take photo, on here, I can see the log function loaded so the function is getting called. I think the problem is im using the emulator and its bugging out on here that's why. If I try it on an andriod phone I think it'll work:
+
+![alt text](./images-for-log/image12.png)
+
+- I need to figure out how I will get the uri loaded onto the profile picture section to display image user chooses. But for now I'll try seeing if expo maps worked or not. Right, so we need an api key for this expo maps aswell. Ahh, I will leave this for later, let's just continue working on the profile picture uploads for now then.
+
+- What im doing now, is setting up the profile picture path and everything in the backend. Just file uploads using multer, cloudinary etc. so essentially, we just fetch the profile picture from backend and the frontend only displays the image.
+
+- Ok, the uploader middleware is done. I was happy asl when i made the uploader function, tried to make the put request to form data and it worked first try. I was expecting an error, first time things go smoothly. Anyways. So now when I change profile picture, uploads folder with that profile pic file is being created.
