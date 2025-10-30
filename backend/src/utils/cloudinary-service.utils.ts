@@ -20,6 +20,7 @@ export const uploadFile = async(path:string,dir='/')=>{
       path:secure_url
     }
   }catch(err){
+    console.error("Cloudinary upload error", err);
     throw new CustomError(`Error uploading file to cloud`,500)
   }
 }
@@ -33,6 +34,7 @@ export const deleteFiles = async(public_id:string[])=>{
     const res = await Promise.all(promiseRes)
     return true
   }catch(err){
+    console.error("Cloudinary upload error", err);
     throw new CustomError(`Error deleting file from cloud`,500)
   }
 }
