@@ -3,10 +3,11 @@ import { Camera, Upload, Trash2Icon } from "lucide-react-native";
 import React from "react";
 import * as ImagePicker from "expo-image-picker";
 import { useMutation } from "@tanstack/react-query";
-import { updateProfileAPI } from "@/src/api/user.api";
+import { deleteProfilePictureAPI, updateProfileAPI } from "@/src/api/user.api";
 import { useAuthStore } from "@/src/store/auth.store";
 import { setItem } from "@/src/store/storage";
 import Toast from "react-native-toast-message";
+import { IUser } from "@/src/types/user.types";
 
 interface Types {
   ChangePfpClicked: boolean;
@@ -83,15 +84,7 @@ const ChangePictureOptions = ({ setChangePfpClicked }: Types) => {
 
   // delete pfp
   const handleDeletePfp = async () => {
-    try {
-      await saveImage(null)
-    } catch (err:any) {
-      Toast.show({
-        type: "error",
-        text1: err,
-        position: "top",
-      });
-    }
+    await mutation();
   };
 
   // calling backend
@@ -133,6 +126,33 @@ const ChangePictureOptions = ({ setChangePfpClicked }: Types) => {
     setChangePfpClicked(false);
   };
 
+  // calling backend
+  const { mutate: mutation } = useMutation({
+    mutationFn: deleteProfilePictureAPI,
+    mutationKey: ["delete_profile_picture_key"],
+    onSuccess: (response) => {
+      // updating user key to our updated values
+      const { profilePicture, ...userWithoutPfp } = user as IUser;
+      setItem("user", userWithoutPfp);
+
+      Toast.show({
+        type: "success",
+        text1: "Profile Picture removed",
+        position: "top",
+      });
+      setChangePfpClicked(false);
+    },
+    onError: (err) => {
+      console.error("Mutation Error:", err);
+      Toast.show({
+        type: "error",
+        text1:
+          err?.message ?? "Error updating profile. Please try again later.",
+        position: "top",
+      });
+    },
+  });
+
   return (
     <View className="bg-card w-[85vw] rounded-lg pb-10 border-fourth">
       <Text className="text-white font-semibold text-3xl pl-5 mt-6">
@@ -172,7 +192,10 @@ const ChangePictureOptions = ({ setChangePfpClicked }: Types) => {
         </View>
 
         {/* Delete + icon */}
-        <Pressable className="flex-row items-center gap-3 pl-9 mt-6" onPress={handleDeletePfp}>
+        <Pressable
+          className="flex-row items-center gap-3 pl-9 mt-6"
+          onPress={handleDeletePfp}
+        >
           <View className="bg-fourth p-2 rounded-full items-center">
             <Trash2Icon color={"#ef4444"} />
           </View>
