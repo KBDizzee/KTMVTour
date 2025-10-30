@@ -59,7 +59,7 @@ const profile = () => {
           />
 
           {/* Profile Picture (Positioned inside gradient) */}
-          <View className="absolute left-[5%] bottom-[-55px] bg-third rounded-full z-10 border-2 border-border">
+          <View className="absolute left-[5%] bottom-[-55px] bg-third rounded-full z-10 border-4 border-border">
             {user?.profilePicture && user?.profilePicture.path ? <Image
               source={{uri: user?.profilePicture.path}}
               style={{

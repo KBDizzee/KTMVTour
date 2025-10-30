@@ -53,9 +53,11 @@ const ChangePictureOptions = ({ setChangePfpClicked }: Types) => {
   // get from gallery
   const handleGalleryPhotos = async () => {
     try {
-      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if(permission.status !== 'granted'){
-        const newPermission = await ImagePicker.requestMediaLibraryPermissionsAsync()
+      const permission =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (permission.status !== "granted") {
+        const newPermission =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (newPermission.status !== "granted") {
           alert("Media permission is required");
           setChangePfpClicked(false);
@@ -64,18 +66,31 @@ const ChangePictureOptions = ({ setChangePfpClicked }: Types) => {
       }
 
       let result = await ImagePicker.launchImageLibraryAsync({
-        aspect:[1,1],
-        quality:1,
+        aspect: [1, 1],
+        quality: 1,
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing:true
-      })
+        allowsEditing: true,
+      });
 
       if (!result.canceled) {
         await saveImage(result.assets[0].uri);
       }
-    } catch (err:any) {
+    } catch (err: any) {
       alert("Error uploading image:" + err);
       setChangePfpClicked(false);
+    }
+  };
+
+  // delete pfp
+  const handleDeletePfp = async () => {
+    try {
+      await saveImage(null)
+    } catch (err:any) {
+      Toast.show({
+        type: "error",
+        text1: err,
+        position: "top",
+      });
     }
   };
 
@@ -90,7 +105,7 @@ const ChangePictureOptions = ({ setChangePfpClicked }: Types) => {
 
       Toast.show({
         type: "success",
-        text1: response.message ?? "Profile Updated",
+        text1: "Profile Picture updated. Changes will show on app reload.",
         position: "top",
       });
       setChangePfpClicked(false);
@@ -107,15 +122,15 @@ const ChangePictureOptions = ({ setChangePfpClicked }: Types) => {
     },
   });
 
-  const saveImage = (uri: string) => {
+  const saveImage = async (uri: string | null) => {
     const formdata = new FormData();
     formdata.append("profilePicture", {
       uri,
       name: "photo.jpg",
       type: "image/jpeg",
     } as any);
-    mutate(formdata);
-    setChangePfpClicked(false)
+    await mutate(formdata);
+    setChangePfpClicked(false);
   };
 
   return (
@@ -143,7 +158,10 @@ const ChangePictureOptions = ({ setChangePfpClicked }: Types) => {
 
         {/* Upload from photos + icon */}
         <View className="pl-9">
-          <Pressable className="flex-row items-center gap-3 mt-6" onPress={handleGalleryPhotos}>
+          <Pressable
+            className="flex-row items-center gap-3 mt-6"
+            onPress={handleGalleryPhotos}
+          >
             <View className="bg-fourth p-2 rounded-full items-center">
               <Upload color={"#8B5CF6"} />
             </View>
@@ -154,12 +172,12 @@ const ChangePictureOptions = ({ setChangePfpClicked }: Types) => {
         </View>
 
         {/* Delete + icon */}
-        <View className="flex-row items-center gap-3 pl-9 mt-6">
+        <Pressable className="flex-row items-center gap-3 pl-9 mt-6" onPress={handleDeletePfp}>
           <View className="bg-fourth p-2 rounded-full items-center">
             <Trash2Icon color={"#ef4444"} />
           </View>
           <Text className="text-red-500 text-lg">Delete</Text>
-        </View>
+        </Pressable>
       </View>
     </View>
   );
