@@ -1124,3 +1124,33 @@ const handleTakePhotos = async () => {
 - Ok, the uploader middleware is done. I was happy asl when i made the uploader function, tried to make the put request to form data and it worked first try. I was expecting an error, first time things go smoothly. Anyways. So now when I change profile picture, uploads folder with that profile pic file is being created.
 
 - I made the cloudinary upload utils, and imported it within the profile function. I need the testing on it tomorrow. Im kinda sleepy to be doing all this thinking right now, but I think what I've done is good at least for now.
+
+## 30 OCT 25
+
+- Ok, I will see what I got up to yesterday and try to store user pfp in our profile function so it can be used accross site, easily.
+The logic sounds right to me, we handle all the profile picture stuff in the backend and then just display it in the frontend.
+
+- Ok since I had type: String, required: true i faced an error saying path/public id was missing, but I made the path and public Id optional, so now its working. Initially, there is no pfp field in our db. But if we add it then the pfp gets added on.
+
+- gotta implement this into the frontend.
+
+- Ah when doing this:
+
+```TypeScript
+source={require(user?.profilePicture.path)}
+````
+
+- It gave me the error:
+```bash
+ ERROR  app\(tabs)\profile.tsx: app\(tabs)\profile.tsx:Invalid call at line 65: require(user?.profilePicture.path)
+Error: app\(tabs)\profile.tsx:Invalid call at line 65: require(user?.profilePicture.path)
+    at transformJS (C:\Users\ashut\Desktop\KTMVTour\frontend\KTMVTour\node_modules\@expo\metro-config\build\transform-worker\metro-transform-worker.js:337:23)
+    at transformJSWithBabel (C:\Users\ashut\Desktop\KTMVTour\frontend\KTMVTour\node_modules\@expo\metro-config\build\transform-worker\metro-transform-worker.js:487:18)
+```
+
+- apparently when the images are coming from like api calls, you have to use uri instead of require like this (this fixed problem):
+```TypeScript
+source={{uri: user?.profilePicture.path}}
+```
+
+- The profile picture logic is completely handled on the backend, just need to allow updates from frontend now and then profile picture functionality is done.
