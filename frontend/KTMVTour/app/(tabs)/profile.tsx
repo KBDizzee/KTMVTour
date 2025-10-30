@@ -60,16 +60,17 @@ const profile = () => {
           />
 
           {/* Profile Picture (Positioned inside gradient) */}
-          <View className="absolute left-[5%] bottom-[-55px] bg-third rounded-full z-10 border-[1px] border-border">
-            {pfp? <Image
-              source={require("@/assets/sample-images/form-bg.png")}
+          <View className="absolute left-[5%] bottom-[-55px] bg-third rounded-full z-10 border-2 border-border">
+            {user?.profilePicture && user?.profilePicture.path ? <Image
+              source={{uri: user?.profilePicture.path}}
               style={{
                 width: 100,
                 height: 100,
                 borderRadius: 50, 
                 resizeMode: "cover",
               }}
-            /> : <Image
+            /> 
+           : <Image
               source={require("@/assets/sample-images/no-profile.png")}
               style={{
                 width: 100,

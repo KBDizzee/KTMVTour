@@ -9,4 +9,5 @@ export interface ISignupData{
   email:string,
   password:string,
   username:string
+  profilePicture?:null
 }

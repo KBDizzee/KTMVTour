@@ -6,7 +6,10 @@ interface User {
   _id: string;
   username: string;
   email: string;
-  profilePicture?: string;
+  profilePicture?: {
+    path?:string,
+    public_id?:string
+  } | undefined;
   createdAt?:string
 }
 
