@@ -6,10 +6,16 @@ import { checkPassword, HashPassword } from "../utils/bcrypt.utils";
 import { generateAccessToken } from "../utils/jwt.utils";
 import { JWTPayload } from "../types/global.types";
 
+interface ISignupData{
+  email:string,
+  password:string,
+  username: string,
+  profilePicture?:null
+}
 //register function:
 export const register = async (req:Request,res:Response,next:NextFunction) => {
   try {
-    const { email, password, username, profilePicture } = req.body;
+    const { email, password, username, profilePicture }: ISignupData = req.body;
 
     if(!email){
       throw new CustomError(`Email required`,400)

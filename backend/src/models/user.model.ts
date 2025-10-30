@@ -26,12 +26,12 @@ const userSchema = new mongoose.Schema({
   profilePicture:{
     path:{
       type: String,
-      required:true
+      // required:true
     },
     public_id:{
       type:String,
-      required:true
-    }
+      // required:true
+    },
   }
   
 }, {timestamps:true})
