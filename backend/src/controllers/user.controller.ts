@@ -42,11 +42,15 @@ export const updateProfile = async (
       if (username.length < 3 || username.length > 16) {
         throw new CustomError(`Username must be between 3-16 characters`, 400);
       }
+      const checkUserNameExists = await User.findOne(username, { $ne: id });
+      if (checkUserNameExists) {
+        throw new CustomError(`Username already in use`, 400);
+      }
       updatedInfo.username = username;
     }
 
     if (profilePicture) {
-      const oldPfp = user.profilePicture?.public_id
+      const oldPfp = user.profilePicture?.public_id;
 
       //upload new pfp:
       const { path, public_id } = await uploadFile(
