@@ -1217,3 +1217,5 @@ source={{uri: user?.profilePicture.path}}
 
 - so yeah i get api error, axios network error when I pass null through save image function. Lets ask claude and I may have to implement a seperate backend function for this just as a brute force solution. Yeah ill just add another function in backend for this.
 
+- hm ok so now when I try calling the deleteProfilePicture function idk it was showing cannot get property data of undefined.
+
