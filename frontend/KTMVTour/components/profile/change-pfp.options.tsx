@@ -2,19 +2,38 @@ import { View, Text, Pressable } from "react-native";
 import { Camera, Upload, Trash2Icon } from "lucide-react-native";
 import React from "react";
 import * as ImagePicker from "expo-image-picker";
+import { useMutation } from "@tanstack/react-query";
+import { updateProfileAPI } from "@/src/api/user.api";
+import { useAuthStore } from "@/src/store/auth.store";
+import { setItem } from "@/src/store/storage";
+import Toast from "react-native-toast-message";
 
 interface Types {
-  pfp: boolean;
-  setPfp: React.Dispatch<React.SetStateAction<boolean>>;
   ChangePfpClicked: boolean;
   setChangePfpClicked: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ChangePictureOptions = ({setPfp, setChangePfpClicked }: Types) => {
+//ok so when user clicks Take photo button, we call handleTakePhotos at the top using expo image picker and
+// that ends up calling saveImage passing it the uri of the image user took which then gets mutated
+// calling the backend function.
+
+const ChangePictureOptions = ({ setChangePfpClicked }: Types) => {
+  const { user } = useAuthStore();
+
+  //take photo on the spot function
   const handleTakePhotos = async () => {
-    console.log(`Function loaded`)
     try {
-      await ImagePicker.requestCameraPermissionsAsync();
+      const permission = await ImagePicker.requestCameraPermissionsAsync();
+      if (permission.status !== "granted") {
+        const newPermission = await ImagePicker.requestCameraPermissionsAsync();
+
+        if (newPermission.status !== "granted") {
+          alert("Camera permission is required");
+          setChangePfpClicked(false);
+          return;
+        }
+      }
+
       let result = await ImagePicker.launchCameraAsync({
         cameraType: ImagePicker.CameraType.front,
         allowsEditing: true,
@@ -26,14 +45,77 @@ const ChangePictureOptions = ({setPfp, setChangePfpClicked }: Types) => {
         await saveImage(result.assets[0].uri);
       }
     } catch (err: any) {
-      alert("Error uploading image:" + err.message)
-      setChangePfpClicked(false)
+      alert("Error uploading image:" + err);
+      setChangePfpClicked(false);
     }
   };
 
-  const saveImage = (photo: any) => {
-    setPfp(photo);
-    setChangePfpClicked(false);
+  // get from gallery
+  const handleGalleryPhotos = async () => {
+    try {
+      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if(permission.status !== 'granted'){
+        const newPermission = await ImagePicker.requestMediaLibraryPermissionsAsync()
+        if (newPermission.status !== "granted") {
+          alert("Media permission is required");
+          setChangePfpClicked(false);
+          return;
+        }
+      }
+
+      let result = await ImagePicker.launchImageLibraryAsync({
+        aspect:[1,1],
+        quality:1,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing:true
+      })
+
+      if (!result.canceled) {
+        await saveImage(result.assets[0].uri);
+      }
+    } catch (err:any) {
+      alert("Error uploading image:" + err);
+      setChangePfpClicked(false);
+    }
+  };
+
+  // calling backend
+  const { mutate, isPending } = useMutation({
+    mutationFn: updateProfileAPI,
+    mutationKey: ["update_profile_key"],
+    onSuccess: (response, variables) => {
+      // updating user key to our updated values
+      const updatedUser = { ...user, ...variables };
+      setItem("user", updatedUser);
+
+      Toast.show({
+        type: "success",
+        text1: response.message ?? "Profile Updated",
+        position: "top",
+      });
+      setChangePfpClicked(false);
+    },
+    onError: (err) => {
+      console.error("Mutation Error:", err);
+
+      Toast.show({
+        type: "error",
+        text1:
+          err?.message ?? "Error updating profile. Please try again later.",
+        position: "top",
+      });
+    },
+  });
+
+  const saveImage = (uri: string) => {
+    const formdata = new FormData();
+    formdata.append("profilePicture", {
+      uri,
+      name: "photo.jpg",
+      type: "image/jpeg",
+    } as any);
+    mutate(formdata);
+    setChangePfpClicked(false)
   };
 
   return (
@@ -46,7 +128,10 @@ const ChangePictureOptions = ({setPfp, setChangePfpClicked }: Types) => {
       <View className="mt-6">
         {/* Take photo + icon */}
         <View className="pl-9">
-          <Pressable className="flex-row items-center gap-3" onPress={handleTakePhotos}>
+          <Pressable
+            className="flex-row items-center gap-3"
+            onPress={handleTakePhotos}
+          >
             <View className="bg-fourth p-2 rounded-full items-center">
               <Camera color={"#8B5CF6"} />
             </View>
@@ -58,12 +143,12 @@ const ChangePictureOptions = ({setPfp, setChangePfpClicked }: Types) => {
 
         {/* Upload from photos + icon */}
         <View className="pl-9">
-          <View className="flex-row items-center gap-3 mt-6">
+          <Pressable className="flex-row items-center gap-3 mt-6" onPress={handleGalleryPhotos}>
             <View className="bg-fourth p-2 rounded-full items-center">
               <Upload color={"#8B5CF6"} />
             </View>
             <Text className="text-white text-lg">Upload from Photos</Text>
-          </View>
+          </Pressable>
           {/* Line Break */}
           <View className="border-[0.2px] border-button w-[80%] mt-4 flex itesm"></View>
         </View>

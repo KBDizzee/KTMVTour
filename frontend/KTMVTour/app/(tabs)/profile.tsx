@@ -20,7 +20,6 @@ const profile = () => {
   const { logout } = useAuthStore();
   const { user } = useAuthStore();
 
-  const [pfp, setPfp] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [changePfpClicked, setChangePfpClicked] = useState(false);
 
@@ -150,8 +149,6 @@ const profile = () => {
         >
           <Pressable onPress={(e) => e.stopPropagation()}>
             <ChangePictureOptions
-              pfp={pfp}
-              setPfp={setPfp}
               setChangePfpClicked={setChangePfpClicked}
               ChangePfpClicked={changePfpClicked}
             />
