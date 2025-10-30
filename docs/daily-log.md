@@ -1164,3 +1164,56 @@ source={{uri: user?.profilePicture.path}}
 - idk why im getting this because I gave an api key. 
 
 - AHHHHHHHH,. thats why i get the fking error, because I haven't set my .env file on render with the updated values. This should solve problem, ok that's solved but im still getting the error when trying to do it through the app. Also idk there's some error in my node_modules file. Im trying to delete node_modules and just npm i to install it again. Let's see if it solves that problem at least. That did solve the problem. But idk render's not loading right now, maybe site traffic is high. So i'll leave it for now and work on my other project starting from today aswell. I need to test this tomorrow and hopefully get it working.
+
+## 31 Oct 25
+
+- I can update the username, email password using the same bakcend function. So I think its most definetly how Im handling form data in frontend.
+
+- he hey, I finally got it working. I added this in the api to specifcy we are getting formdata from backend and it worked (maybe im using react native that's why, because I don't remember needing to add this on web):
+```TypeScript
+{headers:{
+      "Content-Type" : "multipart/form-data"
+    }}
+```
+
+- I thought deleting user pfp would be as simple as this:
+
+```TypeScript
+  // delete pfp
+  const handleDeletePfp = async () => {
+    try {
+      await delete user?.profilePicture;
+      Toast.show({
+        type: "success",
+        text1: "Profile Picture removed. Changes will show on app reload",
+        position: "top",
+      });
+      setChangePfpClicked(false)
+    } catch (err) {
+      Toast.show({
+        type: "error",
+        text1: "Error deleting profile picture",
+        position: "top",
+      });
+    }
+  };
+```
+
+- I know why this isn't working, because we are deleting the pfp user which is saved in auth store. So im deleting the user profile for the current app session, but to even see the changes I need to reload app but when I reload app we get new api responses from backend again and the profile picture property hasn't been removed from backend only from user store in previous session, so the pfp isn't deleted at all in the data base. I think the most obvious solution here would just be to create another function in the backend to handle deletion of user profile pictures. E.g, we have a function that finds the current user id and then just uses $unset to delete pfp. I'll also watch this video I was watching on the expo image picker see how they did it and if the solution isn't done well then I'll ask claude if my way is good or if there is another way of approaching this. Ok so the video said we pass null through our save Image fuction, I'll try this but I dont exactly know if my profilePicture is able to take null, if not i'll try changing it so it can accept null:
+
+```TypeScript
+  //pass null here
+  const saveImage = async (uri: string) => {
+    const formdata = new FormData();
+    formdata.append("profilePicture", {
+      uri,
+      name: "photo.jpg",
+      type: "image/jpeg",
+    } as any);
+    await mutate(formdata);
+    setChangePfpClicked(false);
+  };
+```  
+
+- so yeah i get api error, axios network error when I pass null through save image function. Lets ask claude and I may have to implement a seperate backend function for this just as a brute force solution. Yeah ill just add another function in backend for this.
+
