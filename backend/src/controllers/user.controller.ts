@@ -82,10 +82,24 @@ export const updateProfile = async (
     }).select("-password");
 
     res.status(200).json({
-      message: `Profile Updated. Changes will show when you reload app.`,
+      message: `Profile Updated. Changes will show on app reload`,
       data: updatedUser,
     });
   } catch (err) {
     next(err);
   }
 };
+
+export const deleteProfile = async(req:Request,res:Response,next:NextFunction):Promise<void>=>{
+  try{
+    const id = req.user._id
+    await User.findByIdAndUpdate(id,{$unset:{"profilePicture" : ""}})
+
+    res.status(200).json({
+      message:`Profile Picture removed`,
+      data:null
+    })
+  }catch(err){
+    next(err)
+  }
+}
