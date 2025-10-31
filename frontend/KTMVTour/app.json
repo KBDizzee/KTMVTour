@@ -22,6 +22,9 @@
         "backgroundImage": "./assets/images/playstore.png",
         "monochromeImage": "./assets/images/playstore.png"
       },
+      "androidNavigationBar": {
+        "visible": "sticky-immersive"
+      },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.anonymous.KTMVTour"

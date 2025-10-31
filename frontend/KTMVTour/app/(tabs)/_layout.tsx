@@ -1,8 +1,10 @@
 import { Image } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
+// import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const layout = () => {
+  // const insets = useSafeAreaInsets()
   return (
     <Tabs
       screenOptions={{
@@ -10,6 +12,8 @@ const layout = () => {
           backgroundColor: "#1C1C1E",
           borderColor: "#3A3A3C",
           paddingTop: 7,
+          // paddingBottom: insets.bottom,
+          // height: 60 + insets.bottom
         },
         tabBarLabelStyle: {
           fontSize: 13,
