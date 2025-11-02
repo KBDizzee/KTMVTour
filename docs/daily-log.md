@@ -1239,3 +1239,8 @@ source={{uri: user?.profilePicture.path}}
 ![alt text](./images-for-log/image15.png)
 
 - Ok, I got the bottom detection card setup of the tours page, all that's left is to change the style for that depending on state and also add the scan overlay + a little heading at the top.
+
+
+- The layout of tours page is complete for now:
+
+![alt text](./images-for-log/image16.png)
