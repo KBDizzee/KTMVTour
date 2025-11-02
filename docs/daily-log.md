@@ -1230,4 +1230,12 @@ source={{uri: user?.profilePicture.path}}
 
 - Today I want to grab a lot of images and style the tours page some more. Also, what I need to do is either figure out a way I can display maps for free. Ahh my figma credits don't reset till tomorrow. So I'll wait until tomorrow for the tours page design. So todays task is mainly to just get some images for the model and I'll see what else I can work on.
 
-- I also need to see how maybe I can implement more than just mongo db databse on here. I need to make use of more than one database, maybe graph ql maybe sql etc... It's a long shot but maybe if I can recreate tiktok structure for the social media/community part of this app it'll be good. Instead of allowing videos, I think i should keep it to just photos or maybe let's see I might add videos aswell and let users scroll like its tiktok. I don't think i'll be able to do it, but if I can allow for video posting and recreate tiktok's way of fetching videos e.g already having fetched a certain amount of videos 
+- I also need to see how maybe I can implement more than just mongo db databse on here. I need to make use of more than one database, maybe graph ql maybe sql etc... It's a long shot but maybe if I can recreate tiktok structure for the social media/community part of this app it'll be good. Instead of allowing videos, I think i should keep it to just photos or maybe let's see I might add videos aswell and let users scroll like its tiktok. I don't think i'll be able to do it, but if I can allow for video posting and recreate tiktok's way of fetching videos e.g already having fetched a certain amount of videos when app loads then that'll be good.
+
+## 2 Nov 25
+
+- I need to change the styling of the tours page today so that's the first task. Then after that i need to grab some images for the model. After that I may just work on my other things today. I don't really know and I still gotta solve the maps problem aswell. I asked on discord and I was given this response, I need to check it out:
+
+![alt text](./images-for-log/image15.png)
+
+- Ok, I got the bottom detection card setup of the tours page, all that's left is to change the style for that depending on state and also add the scan overlay + a little heading at the top.
