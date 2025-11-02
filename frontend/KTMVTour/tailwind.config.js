@@ -15,7 +15,9 @@ module.exports = {
         border:'#2d1b69',
         third:'#2A2A2A',
         bg:'#312746',
-        fourth:'#231639'
+        fourth:'#231639',
+        fifth:'#2E2443',
+        card2:'#161616'
       }
     },
   },
