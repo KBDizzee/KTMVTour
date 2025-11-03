@@ -1248,3 +1248,5 @@ source={{uri: user?.profilePicture.path}}
 ## 3 NOV 25
 
 - Ok so for today I will just collect some images for my no landmark class. Also, I need to take some time to learn about databases, rate limiting , preventing web scraping etc. all things that may be useful for this project. I want to try to use more than just mongodb, I will implement another 1 or 2 databases aswell {at least try to} because in some cases e.g relational data a sql db may be better. When I finish getting the images for my no landmark class the model is ready to be implemented into the app, and then from there it's just about making the social media section and if I ever get stuck on that part there should be thousands of tutorials on youtube for social media clones. I expected this project to take me a very long time, but tbh I think it will be ready much much before anticipated. Anyways, the main task is to grab some images for today and that's it, unless I figure something else I need to do aswell.
+
+- Im on like 1.2k images right now. I think maybe if I can get to 1.5k today and just finish it off tomorrow. 
