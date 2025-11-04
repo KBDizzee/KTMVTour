@@ -1254,3 +1254,5 @@ source={{uri: user?.profilePicture.path}}
 ## 4 Nov 25
 
 - I didn't get to 1500 yesterday, it would've been so good if I could but eh it's fine. Anyways I've been grabbing images for like an hour Im on basically 1500 now. I think I can pump out like 250/275 images an hour, so if I can keep going at this rate then maybe in 2-3 hours I can finish grabbing my 2k images.
+
+- After like another 45 mins or an hour Im at just over 1700 images. This will definetly be done by the end of the day. I need to try and grab some more variety though, maybe take some from my phone?
