@@ -4,3 +4,6 @@ dharahara
 logs*/
 exported-models
 no-landmark
+.env
+test/
+exported-tf-lite-model/

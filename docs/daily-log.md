@@ -1326,3 +1326,78 @@ Result: "Which landmark is it?" (A, B, or C)
 ```
 
 - So yep, I think today I can train the model and maybe if I get around to it, convert model to tensorflow lite. Ok at least i got this part done ~ "by the end of today, I want to have a clear direction of what I need to do with my model".
+
+- Im about to train my model and export it. Let's see how it goes. Ok so im facing this error when I try to run file to train model:
+
+```bash
+PS C:\Users\ashut\Desktop\KTMVTour> & C:/Users/ashut/Desktop/KTMVTour/ml-model/venv/Scripts/Activate.ps1
+(venv) PS C:\Users\ashut\Desktop\KTMVTour> & C:/Users/ashut/Desktop/KTMVTour/ml-model/venv/Scripts/python.exe c:/Users/ashut/Desktop/KTMVTour/ml-model/models/training-model.py
+2025-11-05 15:30:37.639733: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-11-05 15:30:51.082782: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING:tensorflow:From C:\Users\ashut\Desktop\KTMVTour\ml-model\venv\Lib\site-packages\tf_keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+
+Traceback (most recent call last):
+  File "c:\Users\ashut\Desktop\KTMVTour\ml-model\models\training-model.py", line 56, in <module>
+    train_ds = keras.utils.image_dataset_from_directory(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ashut\Desktop\KTMVTour\ml-model\venv\Lib\site-packages\tf_keras\src\utils\image_dataset.py", line 213, in image_dataset_from_directory
+    image_paths, labels, class_names = dataset_utils.index_directory(
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ashut\Desktop\KTMVTour\ml-model\venv\Lib\site-packages\tf_keras\src\utils\dataset_utils.py", line 574, in index_directory
+    partial_filenames, partial_labels = res.get()
+                                        ^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\pool.py", line 774, in get
+    raise self._value
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\pool.py", line 125, in worker
+    result = (True, func(*args, **kwds))
+                    ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ashut\Desktop\KTMVTour\ml-model\venv\Lib\site-packages\tf_keras\src\utils\dataset_utils.py", line 645, in index_subdirectory
+    for root, fname in valid_files:
+  File "C:\Users\ashut\Desktop\KTMVTour\ml-model\venv\Lib\site-packages\tf_keras\src\utils\dataset_utils.py", line 620, in iter_valid_files
+    for root, _, files in sorted(walk, key=lambda x: x[0]):
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ashut\Desktop\KTMVTour\ml-model\venv\Lib\site-packages\tensorflow\python\lib\io\file_io.py", line 876, in walk_v2
+    if is_directory(full_path):
+       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ashut\Desktop\KTMVTour\ml-model\venv\Lib\site-packages\tensorflow\python\lib\io\file_io.py", line 689, in is_directory
+    return is_directory_v2(dirname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ashut\Desktop\KTMVTour\ml-model\venv\Lib\site-packages\tensorflow\python\lib\io\file_io.py", line 703, in is_directory_v2
+    return _pywrap_file_io.IsDirectory(compat.path_to_bytes(path))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xed in position 76: invalid continuation byte
+(venv) PS C:\Users\ashut\Desktop\KTMVTour> 
+```
+
+
+- Ok the model is trained and exported:
+
+```bash
+
+126/126 [==============================] - 20s 137ms/step - loss: 0.0809 - acc: 0.9712 - val_loss: 0.0525 - val_acc: 0.9900
+Epoch 2/10
+126/126 [==============================] - 14s 108ms/step - loss: 0.0279 - acc: 0.9920 - val_loss: 0.0433 - val_acc: 0.9900
+Epoch 3/10
+126/126 [==============================] - 14s 107ms/step - loss: 0.0171 - acc: 0.9955 - val_loss: 0.0411 - val_acc: 0.9900
+Epoch 4/10
+126/126 [==============================] - 13s 107ms/step - loss: 0.0106 - acc: 0.9980 - val_loss: 0.0433 - val_acc: 0.9920
+Epoch 5/10
+126/126 [==============================] - 14s 111ms/step - loss: 0.0070 - acc: 0.9995 - val_loss: 0.0458 - val_acc: 0.9920
+Epoch 6/10
+126/126 [==============================] - 16s 125ms/step - loss: 0.0053 - acc: 0.9995 - val_loss: 0.0469 - val_acc: 0.9920
+Epoch 7/10
+126/126 [==============================] - 13s 107ms/step - loss: 0.0042 - acc: 1.0000 - val_loss: 0.0479 - val_acc: 0.9900
+Epoch 8/10
+126/126 [==============================] - 13s 107ms/step - loss: 0.0033 - acc: 1.0000 - val_loss: 0.0487 - val_acc: 0.9900
+Epoch 9/10
+126/126 [==============================] - 14s 108ms/step - loss: 0.0027 - acc: 1.0000 - val_loss: 0.0492 - val_acc: 0.9900
+Epoch 10/10
+126/126 [==============================] - 13s 107ms/step - loss: 0.0023 - acc: 1.0000 - val_loss: 0.0493 - val_acc: 0.9900
+1/1 [==============================] - 0s 407ms/step
+['no-landmark' 'no-landmark' 'boudha-stupa' 'no-landmark' 'no-landmark'
+ 'no-landmark' 'no-landmark' 'no-landmark' 'no-landmark' 'no-landmark'
+ 'no-landmark' 'boudha-stupa' 'no-landmark' 'no-landmark' 'no-landmark'
+ 'no-landmark']
+``` 
+
+- Also, I wrote a script to convert the exported model to tf lite and it's now done. The tf lite model size is 2.39 mb. I will need to import this tf lite model to my app later on.
