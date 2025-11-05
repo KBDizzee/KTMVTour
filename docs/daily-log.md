@@ -1262,3 +1262,45 @@ source={{uri: user?.profilePicture.path}}
 - Ok the dataset for no landmark class is done for now. With this dataset I should be able to get the model up and running but only be able to detect the one landmark for now. Now I shouldn't have to worry about grabbing images until I decide I want to introduce the virtual tours for other landmarks and I won't do that any time soon. I'll do it if I release the app otherwise no need to go through the pain of grabbing images for different landmarks. 
 
 - That's it for today, tomorrow I will re read the resposne I got about anomaly detection and how rerunning model every time I add more images to data set may cause accuracy to go down and most importantly, I have to confirm that it will actually work well with decent enough accuracy. Im aiming for 75%+ accuracy, i think it should be a reasonable target especially considering I've gotten 500 images for the landmark and 2k for no landmark. If this shit doesn't end up working at all, it's not gonna be a waste of time, it'll be a lesson for next time Im doing something similar. But, that shouldn't happen. It's just about maximising the accuracy of the model.
+
+## 5 Nov 25
+
+- Ok I was reviewing those messages I got and yeah I get what the anomaly detection was for. Essientially, this is the flow my model should follow:
+```bash
+User takes photo
+    ↓
+Stage 1: Is this ANY landmark?
+    ↓
+  No → "Not a landmark"
+    ↓
+  Yes → Stage 2: Which landmark is it?
+         ↓
+         Landmark A/B/C → Show description
+```
+
+- This helps us with these two things:
+    Performance: Most photos won't be landmarks, so we avoid running expensive checks unnecessarily
+    Scalability: As you add more landmarks, you don't slow down the average case (non-landmark photos)
+
+- What claude reccomends me doing is sticking to the way Im doing it for now and it's saying that I could build like a binary classifier e.g using images from all my landmarks combined into one folder and the other no landmark images folder. So then we can answer the question is this a landmark first then if it's a landmark we can go into seeing which landmark it is. However, I can also use true landmark detection using methods like Autoencoders, isolation forest, one class svm. I know the binary classifier is easier but I may have to go with the true anomaly detection methods just to learn and make it interesting. Plus I think it may help with the accuracy and is a lot more scalable that way we don't have to keep adding no landmark images because that can be anything.
+
+- Ok so I asked this question online and let's see what response I get, until then I guess I'll just have to look into anomaly detection more:
+![alt text](./images-for-log/image17.png)
+
+- This guy named Krish Naik on youtube completely explained the concept of isolation forest, DBScan + local outlier factor and I understood it very well: https://www.youtube.com/watch?v=OS9xRGKfx4E
+
+- Ok now the thing is how can I use this knowledge to combine isolation forest or DBScan with local outlier factor and instead of having it for just number values plotted, how can I use it for images. I will search online for this exactly: isolation forest/DBScan/Local outlier factor with images python. But these concepts are cool asl, maybe I could build my next project to do with something in the medical world. e.g check x rays and alert doctors for anomalies.... but that's for later. I just need to focus on this task for right now.
+
+- Ok im just reading through stack exchange: https://ai.stackexchange.com/questions/39541/how-to-detect-outlier-images and I can see this guy has a similar problem to me. The answer suggested using autoencoder neural network. Here is how the autoencoder should work according to the answer:
+
+```bash
+The idea is to train an autoencoder on a large set of dog images, and then use the trained network to encode (compress) each image into a lower-dimensional representation. The encoded representations should capture the key features of dog images. The network can then be used to reconstruct the original image from the encoded representation.
+
+Now, when a new image (e.g., a cat image or a trash image) is presented, the network will not be able to reconstruct it well because it has not seen that kind of image before. The reconstruction error will be higher for the novel image, which can be used to identify it as an outlier.
+
+You can use this approach to build a threshold-based anomaly detection system, where any image with a reconstruction error above a certain threshold is considered an outlier. Alternatively, you can use a more sophisticated anomaly detection algorithm like One-class SVM, Isolation Forest, or Local Outlier Factor.
+
+Another option is to use clustering techniques like k-means or DBSCAN to cluster the dog images and identify clusters with very few points as outliers. However, this approach may not work well if the outlier images are visually similar to dog images.
+```
+
+- I will look into autoencoders, hopefully there is a tutorial from the same guy Krish Naik on youtube aswell. His explanations were really good. Ok by the end of today, I want to have a clear direction of what I need to do with my model. I think im almost there yet, I just need to do the anomaly detection using like an autoencoder or DBScan etc. but let me get more of an idea still.
