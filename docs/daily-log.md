@@ -1304,3 +1304,25 @@ Another option is to use clustering techniques like k-means or DBSCAN to cluster
 ```
 
 - I will look into autoencoders, hopefully there is a tutorial from the same guy Krish Naik on youtube aswell. His explanations were really good. Ok by the end of today, I want to have a clear direction of what I need to do with my model. I think im almost there yet, I just need to do the anomaly detection using like an autoencoder or DBScan etc. but let me get more of an idea still.
+
+- Ok i found this sort of intro that basically explained what autoencoders were and how they worked with a good diagram from this video: https://www.youtube.com/watch?v=E1C8xY8rlVc I watched maybe 8 mins of this, it provided a general intro into how autoencoders work and specifically for anomaly detection. However, the video I need to help implemenent this is this one here which talks about how we can identify anomaly images using convolutional autoencoders: 260 - Identifying anomaly images using convolutional autoencoders: https://www.youtube.com/watch?v=q_tpFGHiRgg, right so within the first minute of this video the guy says if we have a binary classifier with good and bad images we'll get much more accuracy that way because we have images for both datasets. Hmm, ok, but let's keep watching this video. Alright, I didn't really understand that video and I think it's bound to make too many errors that way. Im watching this other one on LSTM but I think that's not really applicable to what im trying to do. 
+
+- I realised this anomaly detection won't work right now, because I only have the 500 images of my one landmark not of many. So what I need to do is release the app with only the tour avaliable for my landmark A and then once I get everything else out of the way... e.g social media features etc. I can then focus on implementing the two stages with anomaly detection. I.e it will look like this:
+
+```bash
+Stage 1 (Gatekeeper):
+Training data for anomaly detection:
+└── all_landmarks/  # 500 A + 500 B + 500 C combined
+
+Result: "Is this ANY landmark?" (Yes/No)
+
+Stage 2 (Classifier):
+Training data:
+├── landmark_a/     # 500 images
+├── landmark_b/     # 500 images  
+└── landmark_c/     # 500 images
+
+Result: "Which landmark is it?" (A, B, or C)
+```
+
+- So yep, I think today I can train the model and maybe if I get around to it, convert model to tensorflow lite. Ok at least i got this part done ~ "by the end of today, I want to have a clear direction of what I need to do with my model".
