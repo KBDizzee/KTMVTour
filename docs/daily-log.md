@@ -1401,3 +1401,19 @@ Epoch 10/10
 ``` 
 
 - Also, I wrote a script to convert the exported model to tf lite and it's now done. The tf lite model size is 2.39 mb. I will need to import this tf lite model to my app later on.
+
+- Im running 4 tests with these images:
+
+![alt text](./images-for-log/1.JPG) ![alt text](./images-for-log/2.JPG) ![alt text](./images-for-log/3.JPG) ![alt text](./images-for-log/4.jpg)
+
+- First test with image 1 : ~Expected output: no landmark, actual output: ~no landmark 
+- First test with image 2 : ~Expected output: no landmark, actual output: ~no landmark 
+- First test with image 3 : ~Expected output: no landmark, actual output: ~no landmark 
+- First test with image 4 : ~Expected output: boudha stupa, actual output: ~boudha stupa
+
+
+- All tests working as expectedddddd. Ok this is a good sign. I need to rigourously test this. But it's a good sign the model is working and fairly accurate.
+
+## 6 Nov 25
+
+- I probably won't be able to get much done today. However, if I start researching on things like redis, rate limitng, sql etc. it'll be good. If by the end of today I know where and how to implement another db aswell then i'll be happy as well as if I can implement rate limiting to actually prevent DDOS using express and if redis is usesful for my social media part of the app. 
