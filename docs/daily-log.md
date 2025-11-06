@@ -75,14 +75,14 @@ else:
 
   ![alt text](./images-for-log/image4.png)
 
-- Ok right, damn when doing testing even if I put a pic of my face it's still guessing between the two landmarks, boudha-stupa & dharahara.
+- Ok right, damn when doing testing even if I put a pic of my face it's still guessing between the two landmarks.
 - I need to get the accuracy on this thing up. faaaaking hell yeah i gotta get like 700 images each for 2 landmarks & they have to be realistic.
-- Ok im only doing this project for 2 landmarks boudha-stupa & dharahara, and i need to add a class called no-landmark & add maybe like 2k images
+- Ok im only doing this project for 2 landmarks, and i need to add a class called no-landmark & add maybe like 2k images
 - of just random shit so model can differentiate between landmark and other bullshit.
 
 ## 1 Oct 25
 
-- got to 200 images for boudha-stupa for now
+- got to 200 images for landmark a for now
 - removed ICrawler scripts + photos
 
 ## 2 Oct 25
@@ -1428,3 +1428,15 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
   - Redis = fast caching and counters
 
 - I'll start the postgresql tutorial tomorrow. Today if I just spend some time getting photos of another landmark then that'll be good. I need to end up getting another 500 of whichever landmark B I choose, so if I get 50-100 today that'll be awesome.
+
+
+- I got a response to this question I asked on discord, and I ended up getting more of an idea on how I can make my app more secure. Try to attack the app to find its vulnurabilities and then fix those vulnuerabilities:
+
+![alt text](./images-for-log/image18.png)
+
+
+## 7 Nov 25
+
+- Today's task is to watch an intro to postgresql video and if I get around to it, trying to set it up. I'll also grab some images for landmark B for my model. Im on 105 right now, I want to get it to 200. Remember im still going through this checklist:
+https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/edit?tab=t.0#heading=h.k6ofso13lqk1
+
