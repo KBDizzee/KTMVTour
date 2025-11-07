@@ -1449,4 +1449,11 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
   - Posts connect to Users (via user_id from MongoDB)
 
 - I got my tables set up on postgres:
+
 ![alt text](./images-for-log/image19.png)
+
+- ok the connection is all done aswell, It's basically the same as connecting mongodb. However, the problem is now I think since im using the localhost only right now I can't use the data from the db within my app etc. so I need to deploy this somewhere for free with enough store just to use for a while. Then only when and if I release the app i'll pay a bit a month for the database.
+
+- So i got these from the checklist done today, and now i'll just spend some trying grabbing more images of my landmark B, i mightttt shi if I feel like it:
+
+![alt text](./images-for-log/image20.png)
