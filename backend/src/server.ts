@@ -1,16 +1,25 @@
 //imports:
 import express, {Request,Response} from 'express';
 import 'dotenv/config'
-import { connectDB } from './config/db.config';
+import { connectmongoDB,postgresPool } from './config/db.config';
 import { errorHandler } from './middlewares/error-handler.middleware';
 import cookieParser from 'cookie-parser';
 
 // initialisations:
 const app = express()
 const PORT = process.env.PORT
-const DB_URI = process.env.DB_URI
+const mongo_URI = process.env.mongo_URI
 
-connectDB(DB_URI!)
+// Connecting to mongoDB
+connectmongoDB(mongo_URI!)
+// testing PostgreSQL connection:
+postgresPool.query('SELECT NOW()')
+  .then(()=>{
+    console.log(`PostgreSQL connected`)
+  })
+  .catch((err)=>{
+    console.error(`Error connecting to PostgreSQL DB:`,err)
+  })
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

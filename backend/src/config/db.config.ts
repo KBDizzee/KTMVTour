@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
+import { Pool } from 'pg';
+import 'dotenv/config';
 
-export const connectDB = (DB_URI:string)=>{
-  mongoose.connect(DB_URI,{})
+export const connectmongoDB = (mongo_URI:string)=>{
+  mongoose.connect(mongo_URI,{})
   .then(()=>{
     console.log(`Connected to MongoDB`)
   })
@@ -9,4 +11,15 @@ export const connectDB = (DB_URI:string)=>{
     console.log(`MongoDB Connection Error:`,err)
   })
 }
+
+export const postgresPool = new Pool ({
+  connectionString: process.env.POSTGRES_URI
+})
+  postgresPool.connect()
+  .then(()=>{
+    console.log(`Connected to PostgreSQL`)
+  })
+  .catch((err)=>{
+    console.log(`PostgreSQL Connection Error:`,err)
+  })
 
