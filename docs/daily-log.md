@@ -1440,3 +1440,13 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 - Today's task is to watch an intro to postgresql video and if I get around to it, trying to set it up. I'll also grab some images for landmark B for my model. Im on 105 right now, I want to get it to 200. Remember im still going through this checklist:
 https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/edit?tab=t.0#heading=h.k6ofso13lqk1
 
+- Ok, so I get the architecture of my community/social media page. There will be one database lets call it KTMVTour_community and then inside that there will be four tables, posts, photos, likes comments.... and evrything is with connections so there aren't any bugs e.g users can't like photos 100 times, users can't like a post that doesn't exist... Here are examples of my connections:
+  - Photos connect to Posts (via post_id)
+  - Likes connect to Posts (via post_id)
+  - Comments connect to Posts (via post_id)
+  - Likes connect to Users (via user_id from MongoDB)
+  - Comments connect to Users (via user_id from MongoDB)
+  - Posts connect to Users (via user_id from MongoDB)
+
+- I got my tables set up on postgres:
+![alt text](./images-for-log/image19.png)
