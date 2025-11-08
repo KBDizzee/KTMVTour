@@ -1,6 +1,7 @@
-import { Image } from "react-native";
+import { Image, View } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
+import { Plus } from "lucide-react-native";
 // import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const layout = () => {
@@ -55,6 +56,22 @@ const layout = () => {
           ),
         }}
       />
+
+      {/* <Tabs.Screen
+        name="post"
+        options={{
+          title: "",
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("../../assets/icons/plus.png")}
+              style={{
+                tintColor: focused ? "#9370DB" : "#fff",
+              }}
+            />
+          ),
+        }}
+      /> */}
 
       <Tabs.Screen
         name="community"

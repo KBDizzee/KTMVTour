@@ -1462,3 +1462,7 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 ## 8 Nov 25
 
 - I won't be able to work much today but if I can create the post option within the bottom pages navbar in the middle, that'll be good or find a way to include the post that'll be good. Also, maybe if I can deploy my postgres on render aswell, that'll be good.
+
+- Alright, i added the post in the middle of the navbar at the bottom but it didn't look good, i'll just add it on top of the community page like reels.
+
+- But that's it for today, not feeling doing anything else.
