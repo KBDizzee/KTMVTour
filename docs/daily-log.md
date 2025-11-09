@@ -1466,3 +1466,13 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 - Alright, i added the post in the middle of the navbar at the bottom but it didn't look good, i'll just add it on top of the community page like reels.
 
 - But that's it for today, not feeling doing anything else.
+
+
+## 9 NOV 25
+
+- I'll just connect the postgres to render first. Oh my goodness bro, this is what it says on here: Your database will expire on December 9, 2025. The database will be deleted unless you upgrade to a paid instance type. Alright, maybe for one month I'll just use this and then after that I'll need to figure out something else to do, or I may just pay $6 a month who knows let's see. Ok, so it's connected and I got the data in there for comments, posts, likes etc. Now I think the db is setup and I can just focus on the backend..., but let's see what the checklist says on that doc (link for it above), also I think i'll add redis at the end after I complete all this then I'll move onto the redis stuff. 
+
+- Ok im starting the backend for the posts. I'll create a function that let's users post with photos, a caption and obviously assign the post with user id.
+
+- Post function, model + routes all done. First post has been made on the app:
+![alt text](./images-for-log/image21.png)
