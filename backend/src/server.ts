@@ -28,11 +28,13 @@ app.use(cookieParser())
 // importing routes:
 import authRoutes from './routes/auth.routes'
 import userRoutes from './routes/user.routes'
+import socialRoutes from './routes/post.routes'
 
 
 // using routes:
 app.use('/api/auth',authRoutes)
 app.use('/api/user',userRoutes)
+app.use('/api/social',socialRoutes)
 
 app.get("/",(req:Request,res:Response) => {
   res.status(200).json({

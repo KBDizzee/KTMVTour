@@ -25,7 +25,7 @@ export const uploader = ()=>{
     }
   })
   const fileSize = 5*1024*1024
-  const allowedExtensions = ['jpg','jpeg','png','webp','gif','avif']
+  const allowedExtensions = ['jpg','jpeg','png','webp','gif','avif','JPG','PNG','JPEG','WEBP','GIF','AVIF',]
 
   // fileFilter function {to control which files should be uploaded}
   const fileFilter = (req:Request,file:Express.Multer.File,cb:multer.FileFilterCallback)=>{

@@ -13,7 +13,13 @@ export const connectmongoDB = (mongo_URI:string)=>{
 }
 
 export const postgresPool = new Pool ({
-  connectionString: process.env.POSTGRES_URI
+  connectionString: process.env.POSTGRES_URI,
+  ssl: {
+    rejectUnauthorized: false, // Required for Render's SSL certs
+  },
+  idleTimeoutMillis: 10000, // close idle clients after 10s
+  connectionTimeoutMillis: 5000, // fail fast if cannot connect
+  max: 10,
 })
   postgresPool.connect()
   .then(()=>{
