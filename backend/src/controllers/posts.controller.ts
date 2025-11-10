@@ -8,7 +8,7 @@ const folder = "posts";
 export const createPost = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction 
 ) => {
   try {
     const id = req.user._id;
