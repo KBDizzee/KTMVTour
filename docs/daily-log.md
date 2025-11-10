@@ -1476,3 +1476,13 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 
 - Post function, model + routes all done. First post has been made on the app:
 ![alt text](./images-for-log/image21.png)
+
+## 10 NOV 25
+
+- So the post route is working on the backend, I'll integrate the frontend component of the social media part later on after I finish off a lot of the backend for it. I'll just go over the checklist doc and see what I need/should move onto next in terms of the backend...
+
+- I just need to run through testing with multiple photos in one post and upload without any photos and make sure im getting the multiple photos posted and error if user tries uploading without any photos. Everything is working perfectly when we upload multiple photos and when we upload no photos and when we try to upload more than 10 photos... So I think I can move onto Phase 3 which is the feed display today. I might be able to get onto the backend function for it, but I want to make sure I get these down first:
+
+![alt text](./images-for-log/image22.png)
+
+- Ok, nvm i'll just understand a bit of basics about redis first and then try to set it up, because I think i will need it while implementing the feed display on backend. So today will be redis stuff and then tomorrow, I can start the feed display. In regards to the feed display, how it'll work I think is our pagination limits to 1 post only. So we load one post only, but then with the help of redis we cache the next 2 or 3 posts already, so everything is super fast and we lessen the amount we need to get post info from db. At least I think that's how it will work, but im not 100% sure yet.
