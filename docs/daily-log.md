@@ -1486,3 +1486,7 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 ![alt text](./images-for-log/image22.png)
 
 - Ok, nvm i'll just understand a bit of basics about redis first and then try to set it up, because I think i will need it while implementing the feed display on backend. So today will be redis stuff and then tomorrow, I can start the feed display. In regards to the feed display, how it'll work I think is our pagination limits to 1 post only. So we load one post only, but then with the help of redis we cache the next 2 or 3 posts already, so everything is super fast and we lessen the amount we need to get post info from db. At least I think that's how it will work, but im not 100% sure yet.
+
+- Ahh i was wondering why my shi didn't connect to db, but I completely forgot to add the db to render env variables. Lucikly I remembered this kind of quick..
+
+- I also got like 75 photos of landmark B so thats good
