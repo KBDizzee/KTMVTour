@@ -54,6 +54,8 @@ app.listen(PORT,()=>{
   console.log(`Server: http://localhost:${PORT}`)
 })
 
+console.log(`Node version: ${process.version}`);
+
 // using error handler:
 app.use(errorHandler)
 
