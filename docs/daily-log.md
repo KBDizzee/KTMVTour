@@ -1496,6 +1496,7 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 - The plan for today is to get the backend feed working without any redis and that includes pagination. So we see one post per page. I need see how we can combine our stuff from the different tables using JOINs, LEFT JOIN, GROUP BY, json_agg etc.
 
 - This is how the response is looking like now with just the combination of the tables:
+
 ![alt text](./images-for-log/image23.png)
 
 
@@ -1506,3 +1507,15 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 - The controller is done, now let's test it out and make sure everything is working fine.
 
 - Everything is fine now im getting all the details I need. I may move onto some frontend today, like get the upload feature styling setup or maybe I'll just focus on some other things today... but I also want to get some more images for landmark b. Im about halfway there so I still need like another 250 and then it should be good enough to train the model on landmark b aswell.
+
+
+- In terms of the devops stuff, this is also what I need to do for this app (no rush on this though):
+
+![alt text](./images-for-log/image24.png)
+
+- Ok, i watched some docker tutorials on youtube, I'll try to containerise the backend for this project with a dockerfile and see if I got it working.
+
+- I got the docker file for backend setup, I also downloaded the docker application so I can test my docker file I setup in backend.
+
+- The backend has been successfully containerised:
+![alt text](./images-for-log/image25.png)
