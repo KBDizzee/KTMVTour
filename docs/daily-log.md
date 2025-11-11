@@ -1490,3 +1490,19 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 - Ahh i was wondering why my shi didn't connect to db, but I completely forgot to add the db to render env variables. Lucikly I remembered this kind of quick..
 
 - I also got like 75 photos of landmark B so thats good
+
+## 11 NOV 25
+
+- The plan for today is to get the backend feed working without any redis and that includes pagination. So we see one post per page. I need see how we can combine our stuff from the different tables using JOINs, LEFT JOIN, GROUP BY, json_agg etc.
+
+- This is how the response is looking like now with just the combination of the tables:
+![alt text](./images-for-log/image23.png)
+
+
+- I also created the pagination utils file because we will need that for this section.
+
+- Now, i just need to get the user'id and combine the two databases, mongo and postgres to return one good return info section with everything about post and the user who posted it username, pfp and id then after that it's about implementing our controller which calls this getFeed function...
+
+- The controller is done, now let's test it out and make sure everything is working fine.
+
+- Everything is fine now im getting all the details I need. I may move onto some frontend today, like get the upload feature styling setup or maybe I'll just focus on some other things today... but I also want to get some more images for landmark b. Im about halfway there so I still need like another 250 and then it should be good enough to train the model on landmark b aswell.
