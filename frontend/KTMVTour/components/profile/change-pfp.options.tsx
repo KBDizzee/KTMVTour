@@ -69,7 +69,7 @@ const ChangePictureOptions = ({ setChangePfpClicked }: Types) => {
       let result = await ImagePicker.launchImageLibraryAsync({
         aspect: [1, 1],
         quality: 1,
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: 'images',
         allowsEditing: true,
       });
 
