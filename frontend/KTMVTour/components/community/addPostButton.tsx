@@ -2,6 +2,9 @@ import { View, Text, TouchableOpacity, Pressable } from "react-native";
 import { Camera, Plus, Upload } from "lucide-react-native";
 import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
+import { useMutation } from "@tanstack/react-query";
+import { postsAPI } from "@/src/api/posts.api";
+import Toast from "react-native-toast-message";
 
 const AddPostButton = () => {
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -54,6 +57,7 @@ const AddPostButton = () => {
         allowsEditing: true,
         aspect: [9, 16],
         quality: 1,
+        allowsMultipleSelection: true,
       });
 
       if (!result.canceled) {
@@ -64,6 +68,39 @@ const AddPostButton = () => {
       setButtonClicked(false);
     }
   };
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: postsAPI,
+    mutationKey: ["upload_post_key"],
+    onSuccess: (response: any) => {
+      console.log(response);
+      Toast.show({
+        type: "success",
+        text1: `Post uploaded`,
+        position: "top",
+      });
+    },
+    onError: (err: any) => {
+      (console.log("Err:", err),
+        Toast.show({
+          type: "error",
+          text1: `Error uploading post`,
+          position: "top",
+        }));
+    },
+  });
+
+  // const upload = async(uri:string | null)=>{
+  //   const formData = new FormData()
+  //   formData.append('posts',{
+  //     uri,
+  //     name:`${Date.now()}`,
+  //     type:'image/jpeg'
+  //   } as any)
+  //   formData.append('caption',caption)
+  //   await mutate(formData)
+  //   setButtonClicked(false)
+  // }
 
   const handleClick = () => {
     console.log(`Clicked`);
@@ -110,7 +147,7 @@ const AddPostButton = () => {
                 <View className="bg-fourth p-1 rounded-full items-center">
                   <Camera color={"#8B5CF6"} size={20} />
                 </View>
-                <Text className="text-white">Take Photos</Text>
+                <Text className="text-white">Take Photo</Text>
               </TouchableOpacity>
               {/* Line Break */}
               <View className="border-[0.2px] border-button w-[90%] mt-2 flex itesm"></View>
