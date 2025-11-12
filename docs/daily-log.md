@@ -1519,3 +1519,14 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 
 - The backend has been successfully containerised:
 ![alt text](./images-for-log/image25.png)
+
+
+# 12 NOV 25
+
+- I need to get the like endpoints on the backend somewhat setup today, and I should also grab some more images for my landmark B.
+
+- I built the backend for like, unlike and checkifPost is liked within like an an hour/1.5 hour now let me just test is real quick to make sure everything is working fine.
+
+- Like endpoint working, the unlike route is saying this: Error handler caught: error: invalid input syntax for type uuid: post id, i'll have a look into this,
+but before that let me just see whats happening with the checkifLiked route. Ahh, it was working fine, I just had a typo in the url. Ok, so the backend for like is done. 
+Now let me just make some frontend for the community page. I think i'll handle the upload post in the frontend today.
