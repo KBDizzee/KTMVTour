@@ -30,6 +30,7 @@ import authRoutes from './routes/auth.routes'
 import userRoutes from './routes/user.routes'
 import socialRoutes from './routes/post.routes'
 import feedRoutes from './routes/feed.routes'
+import likeRoutes from './routes/likes.routes'
 
 
 // using routes:
@@ -37,6 +38,7 @@ app.use('/api/auth',authRoutes)
 app.use('/api/user',userRoutes)
 app.use('/api/social',socialRoutes)
 app.use('/api/feed',feedRoutes)
+app.use('/api/social',likeRoutes)
 
 app.get("/",(req:Request,res:Response) => {
   res.status(200).json({
