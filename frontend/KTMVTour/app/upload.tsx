@@ -9,11 +9,76 @@ import React, { useState } from "react";
 import { router } from "expo-router";
 import { Image, LucideDot, MapPin } from "lucide-react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import * as ImagePicker from "expo-image-picker";
+import { useMutation } from "@tanstack/react-query";
+import { postsAPI } from "@/src/api/posts.api";
+import Toast from "react-native-toast-message";
 
 const Upload = () => {
+
+  const handleUploadPhotos = async () => {
+    try {
+      const permission = await ImagePicker.getMediaLibraryPermissionsAsync();
+      if (permission.status !== "granted") {
+        const newPermission = await ImagePicker.requestCameraPermissionsAsync();
+
+        if (newPermission.status !== "granted") {
+          alert("Photo library permission is required");
+          return;
+        }
+      }
+
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: "images",
+        aspect: [9, 16],
+        quality: 1,
+        allowsMultipleSelection: true,
+      });
+
+      if (!result.canceled) {
+        // await saveImage(result.assets[0].uri);
+      }
+    } catch (err: any) {
+      alert("Error uploading image:" + err);
+    }
+  };
+
   const handleBackClick = () => {
     router.back();
   };
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: postsAPI,
+    mutationKey: ["upload_post_key"],
+    onSuccess: (response: any) => {
+      console.log(response);
+      Toast.show({
+        type: "success",
+        text1: `Post uploaded`,
+        position: "top",
+      });
+    },
+    onError: (err: any) => {
+      (console.log("Err:", err),
+        Toast.show({
+          type: "error",
+          text1: `Error uploading post`,
+          position: "top",
+        }));
+    },
+  });
+
+  const upload = async(uri:string | null)=>{
+    const formData = new FormData()
+    formData.append('posts',{
+      uri,
+      name:`${Date.now()}`,
+      type:'image/jpeg'
+    } as any)
+    // formData.append('caption',caption)
+    // formData.append('location',location)
+    await mutate(formData)
+  }
 
   return (
     <ScrollView
@@ -58,15 +123,17 @@ const Upload = () => {
         </View>
 
         {/* Select Photos Button */}
-        <LinearGradient
-          colors={["rgba(147, 51, 234, 0.2)", "rgba(107, 33, 168, 0.2)"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          className="mt-6 w-[95vw] self-center rounded-md border border-border2 flex-row gap-2 items-center shadow-xl justify-center p-3"
-        >
-          <Image color={"#8B5CF6"} />
-          <Text className="text-white text-xl ">Select Photos</Text>
-        </LinearGradient>
+        <TouchableOpacity activeOpacity={0.8} onPress={handleUploadPhotos}>
+          <LinearGradient
+            colors={["rgba(147, 51, 234, 0.2)", "rgba(107, 33, 168, 0.2)"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            className="mt-6 w-[95vw] self-center rounded-md border border-border2 flex-row gap-2 items-center shadow-xl justify-center p-3"
+          >
+            <Image color={"#8B5CF6"} />
+            <Text className="text-white text-xl ">Select Photos</Text>
+          </LinearGradient>
+        </TouchableOpacity>
 
         {/* Add Location Input */}
         <View className="mt-6 w-[95vw] self-center rounded-md border border-border2 flex-row gap-1 items-center shadow-xl pl-2 bg-post">
