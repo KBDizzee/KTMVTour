@@ -3,10 +3,11 @@ import { postgresPool } from "../config/db.config";
 
 export const uploadPost = async (
   caption: string,
-  userId: string
+  userId: string,
+  location:string
 ) => {
   const result1 = await postgresPool.query(
-    "INSERT INTO posts (caption,user_id) VALUES ($1,$2) RETURNING *",
+    "INSERT INTO posts (caption,user_id,location) VALUES ($1,$2,$3) RETURNING *",
     [caption, userId]
   );
   return result1.rows[0];

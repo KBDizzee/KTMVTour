@@ -13,6 +13,7 @@ export const getFeed = async (page: number = 1, limit: number = 1) => {
     posts.created_at,
     posts.like_count,
     posts.comment_count,
+    posts.location,
     json_agg(
       json_build_object(
         'id', photos.id,
@@ -50,6 +51,7 @@ export const getFeed = async (page: number = 1, limit: number = 1) => {
     return {
       id: post.id,
       caption: post.caption,
+      location: post.location,
       createdAt: post.created_at,
       likeCount: post.like_count,
       commentCount: post.comment_count,

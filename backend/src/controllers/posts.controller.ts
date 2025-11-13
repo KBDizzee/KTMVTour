@@ -12,7 +12,7 @@ export const createPost = async (
 ) => {
   try {
     const id = req.user._id;
-    const { caption } = req.body;
+    const { caption,location } = req.body;
 
     if (!id) {
       throw new CustomError(`Unauthorised`, 401);
@@ -28,7 +28,7 @@ export const createPost = async (
       throw new CustomError(`Maximum 10 photos allowed`, 400);
     }
 
-    const post = await uploadPost(caption, id.toString());
+    const post = await uploadPost(caption, id.toString(),location);
 
     // we store the photos.path in the db after saving it to cloudinary first. To make this process faster, we use promise.all which is used in ts/js (read defintion);
     // a method used for handling multiple asynchronous operations concurrently.
