@@ -1533,3 +1533,19 @@ Now let me just make some frontend for the community page. I think i'll handle t
 
 - I got started on it, but I allowed people to either take photo from library, but I realised I have to build the upload screen first anyways. So I have to let users add photos within that page and also captions. That's all you add when making a post right now. I won't bother adding hashtag features right now, but again if I want to implement a ML system to show a certain user a certain post (algorithm is it called?)  depending on their likes idk what else I could use besides hash tags, but that's for later. I just need to focus on getting the upload done from within the app and then move onto displaying the feed and then I can worry about likes and comments. After that I will just touch up some things within the home page, remove the map feature maybe and also the previewd posts and swap it for something different. Maybe trending landmarks instead? Which just works depending on the amount of scans a landmark has etc. but who knows, that's for later. My first priority is building this working upload page, and I'll get the frontend styling done tomorrow for it, if I can integrate the backend that'd be good too.
 
+## 13 NOV 25
+
+- alright, after a bit of trial and error I finally got the upload posts working on the app. So I got the frontend done today + I connected the backend. The users can select multiple photos and post. I only tried with 3 images and it worked. So I haven't tried all possible cases... I also need to watch for  the extension in this:
+```TypeScript
+formData.append("photos", {
+        uri,
+        name: `${Date.now()}_${index}.jpg`,
+        type: "image/jpeg",
+      } as any);
+```      
+
+- I added a .jpg there because it said file format not found, but I think it'll throw error if user tries to upload png image even though png should be allowed. I need to fix that for tomorrow.
+
+- I probably won't be able to get much done, but tomorrow if I can get the preview working for the upload posts, then that's the upload posts working and I can move onto fetching the feed. But yeah, i just have the preview left for upload posts page and then testing and make sure it is bug free and then i'll move on. The latest I will have to finish the upload posts page is till saturday. Hopefully I can finish that tomorrow so saturday I can move onto loading the feed (without redis).
+
+- Oh btw I also added the location column to my posts table. So yeah, in regards to yesterdays concern about hash tags, I can just use location instead, so places featured most in location for that day will show on home page. But then I need everyone to type the same location e.g boudha and Boudha Stupa must just count as one, im sure I can do that or i'll just add some enums for fixed location places, or I'll add gps feature or something... who knows, that's for later. Anyways, im happy with what I got done today.
