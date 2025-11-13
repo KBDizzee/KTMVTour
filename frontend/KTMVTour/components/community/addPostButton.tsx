@@ -5,6 +5,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useMutation } from "@tanstack/react-query";
 import { postsAPI } from "@/src/api/posts.api";
 import Toast from "react-native-toast-message";
+import { router } from "expo-router";
 
 const AddPostButton = () => {
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -105,6 +106,7 @@ const AddPostButton = () => {
   const handleClick = () => {
     console.log(`Clicked`);
     setButtonClicked(true);
+    router.push('/upload')
   };
 
   const handleExitClick = () => {

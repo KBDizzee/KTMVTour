@@ -16,8 +16,11 @@ module.exports = {
         third:'#2A2A2A',
         bg:'#312746',
         fourth:'#231639',
+        six: '#230E34',
         fifth:'#2E2443',
-        card2:'#161616'
+        card2:'#161616',
+        seven:"#200336",
+        border2: "#481870"
       }
     },
   },
