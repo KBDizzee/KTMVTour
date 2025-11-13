@@ -8,7 +8,7 @@ export const uploadPost = async (
 ) => {
   const result1 = await postgresPool.query(
     "INSERT INTO posts (caption,user_id,location) VALUES ($1,$2,$3) RETURNING *",
-    [caption, userId]
+    [caption, userId,location]
   );
   return result1.rows[0];
 };
