@@ -1,65 +1,140 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+} from "react-native";
+import React, { useState } from "react";
 import { router } from "expo-router";
-import { Image, MapPin } from "lucide-react-native";
+import { Image, LucideDot, MapPin } from "lucide-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 const Upload = () => {
   const handleBackClick = () => {
     router.back();
   };
+
   return (
-    <View className="bg-black pt-8 h-screen">
-      {/* Nav */}
-      <View className="flex-row items-center justify-between mx-2 mt-2">
-        <TouchableOpacity
-          className="p-1 rounded-full w-10 items-center bg-card"
-          onPress={handleBackClick}
-        >
-          <Text className="text-white text-2xl">X</Text>
-        </TouchableOpacity>
-        <Text className="text-xl text-white font-semibold">New Post</Text>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          className="bg-button rounded-2xl px-4 py-2"
-        >
-          <Text className="text-lg text-white font-semibold">Post</Text>
-        </TouchableOpacity>
-      </View>
-      
-      {/* Preview Section */}
-      <View className="border-2 border-dashed border-six mt-2 p-16 items-center justify-center gap-6 w-[95vw] self-center">
-        <View className="p-5 bg-seven w-24 items-center rounded-full border border-button">
-          <Image color={"#8B5CF6"} size={48} />
+    <ScrollView
+      bounces={false}
+      showsVerticalScrollIndicator={false}
+      decelerationRate="fast"
+      scrollEventThrottle={16}
+    >
+      <View className="bg-black pt-8 pb-10">
+        {/* Nav */}
+        <View className="flex-row items-center justify-between mx-2 mt-2">
+          <TouchableOpacity
+            className="p-1 rounded-full w-10 items-center bg-card"
+            onPress={handleBackClick}
+          >
+            <Text className="text-white text-2xl">X</Text>
+          </TouchableOpacity>
+          <Text className="text-xl text-white font-semibold">New Post</Text>
+          <TouchableOpacity activeOpacity={0.8}>
+            <LinearGradient
+              colors={["#9333EA", "#7C3AED", "#6D28D9"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              className="rounded-2xl px-4 py-2"
+            >
+              <Text className="text-lg text-white font-semibold">Post</Text>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
-        <View className="items-center gap-2">
-          <Text className="text-white text-2xl">No Photos Selected</Text>
-          <Text className="text-purple-300 font-semibold">Tap Below to Add Photos</Text>
+
+        {/* Preview Section */}
+        <View className="border-2 border-dashed border-six mt-2 p-16 items-center justify-center gap-6 w-[95vw] self-center rounded-md">
+          <View className="p-5 bg-seven w-24 items-center rounded-full border border-button">
+            <Image color={"#8B5CF6"} size={48} />
+          </View>
+          <View className="items-center gap-2">
+            <Text className="text-white text-2xl">No Photos Selected</Text>
+            <Text className="text-purple-300 font-semibold">
+              Tap Below to Add Photos
+            </Text>
+          </View>
         </View>
+
+        {/* Select Photos Button */}
+        <LinearGradient
+          colors={["rgba(147, 51, 234, 0.2)", "rgba(107, 33, 168, 0.2)"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          className="mt-6 w-[95vw] self-center rounded-md border border-border2 flex-row gap-2 items-center shadow-xl justify-center p-3"
+        >
+          <Image color={"#8B5CF6"} />
+          <Text className="text-white text-xl ">Select Photos</Text>
+        </LinearGradient>
+
+        {/* Add Location Input */}
+        <View className="mt-6 w-[95vw] self-center rounded-md border border-border2 flex-row gap-1 items-center shadow-xl pl-2 bg-post">
+          <MapPin color={"#8B5CF6"} size={20} />
+          <TextInput
+            placeholder="Add Location (e.g Boudha Stupa)"
+            placeholderTextColor="#9CA3AF"
+            className="flex-1 text-white text-xl"
+          />
+        </View>
+
+        {/* Caption Input */}
+        <View className="mt-8 w-[95vw] self-center rounded-md border border-border2 flex-row gap-1 items-start shadow-xl p-3 bg-post">
+          <TextInput
+            placeholder="Write a brief caption about your post...."
+            placeholderTextColor="#9CA3AF"
+            className="flex-1 text-white text-xl"
+            multiline
+            style={{ minHeight: 100, textAlignVertical: "top" }}
+          />
+        </View>
+
+        {/* Tips for Posts section */}
+        <LinearGradient
+          colors={["rgba(147, 51, 234, 0.2)", "rgba(107, 33, 168, 0.2)"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          className="mt-6 w-[95vw] self-center rounded-md border border-border2 flex-row gap-2 shadow-xl p-3"
+        >
+          <View>
+            {/* Heading */}
+            <View>
+              <Text className="text-white text-xl font-semibold">
+                💡 Things to keep in mind:
+              </Text>
+            </View>
+            {/* Points */}
+            <View className="mt-4 max-w-[80vw]">
+              <View className="flex-row gap-2 items-center mb-3">
+                <LucideDot color={"#fff"} />
+                <Text className="text-secondary">
+                  Please keep your posts to be about sharing your experiences &
+                  photos around Kathmandu or Nepal. Posts containing spam,
+                  inappropriate content, or unrelated topics will be removed.
+                </Text>
+              </View>
+              <View className="flex-row gap-2 items-center mb-3">
+                <LucideDot color={"#fff"} />
+                <Text className="text-secondary">
+                  You are able to share up to 10 photos, select some good
+                  pictures from your trips and let others see them. It is
+                  advised that your photos are clear and clearly convey the
+                  message you want to get across.
+                </Text>
+              </View>
+              <View className="flex-row gap-2 items-center">
+                <LucideDot color={"#fff"} />
+                <Text className="text-secondary">
+                  For any feature requests or problems please contact our
+                  support team at support@ktmvtour.com or through the app
+                  settings.
+                </Text>
+              </View>
+            </View>
+          </View>
+        </LinearGradient>
       </View>
-
-      {/* Select Photos Button */}
-      <LinearGradient
-        colors={["rgba(147, 51, 234, 0.2)", "rgba(107, 33, 168, 0.2)"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        className="mt-6 w-[95vw] self-center rounded-md border border-border2 flex-row gap-2 items-center shadow-xl justify-center p-3"
-      >
-        <Image color={'#8B5CF6'}/>
-        <Text className="text-white text-xl ">Select Photos</Text>
-      </LinearGradient>
-
-      {/* Add Location Button */}
-      <LinearGradient
-        colors={["rgba(147, 51, 234, 0.2)", "rgba(107, 33, 168, 0.2)"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        className="mt-6 w-[95vw] self-center rounded-md border border-border2 flex-row gap-2 items-center shadow-xl justify-center p-3"
-      >
-        <MapPin color={'#8B5CF6'} size={20}/>
-        <Text className="text-white text-xl ">Add Location (e.g Boudha Stupa)</Text>
-      </LinearGradient>
-    </View>
+    </ScrollView>
   );
 };
 
