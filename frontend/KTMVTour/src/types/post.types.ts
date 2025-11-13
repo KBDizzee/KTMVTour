@@ -1,6 +1,7 @@
 
 
 export interface IPostData {
-  photos: File[],
+  photos?: File[],
   caption:string
+  location:string
 }

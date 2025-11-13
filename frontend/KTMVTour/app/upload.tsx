@@ -13,8 +13,14 @@ import * as ImagePicker from "expo-image-picker";
 import { useMutation } from "@tanstack/react-query";
 import { postsAPI } from "@/src/api/posts.api";
 import Toast from "react-native-toast-message";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { postSchema } from "@/src/schema/posts.schema";
+import { IPostData } from "@/src/types/post.types";
 
 const Upload = () => {
+  // building a state to store the image uri's until it's time to append them
+  const [imageUri, setImageUri] = useState<string[]>([]);
 
   const handleUploadPhotos = async () => {
     try {
@@ -36,7 +42,12 @@ const Upload = () => {
       });
 
       if (!result.canceled) {
-        // await saveImage(result.assets[0].uri);
+        console.log(`Array of objects: ${JSON.stringify(result.assets)}`);
+        setImageUri(
+          result.assets.map(
+            (eachObjectWithinArray) => eachObjectWithinArray.uri
+          )
+        );
       }
     } catch (err: any) {
       alert("Error uploading image:" + err);
@@ -47,6 +58,19 @@ const Upload = () => {
     router.back();
   };
 
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      location: "",
+      caption: "",
+    },
+    resolver: yupResolver(postSchema),
+    mode: "all",
+  });
+
   const { mutate, isPending } = useMutation({
     mutationFn: postsAPI,
     mutationKey: ["upload_post_key"],
@@ -54,7 +78,7 @@ const Upload = () => {
       console.log(response);
       Toast.show({
         type: "success",
-        text1: `Post uploaded`,
+        text1: response.message ?? `Post uploaded`,
         position: "top",
       });
     },
@@ -62,23 +86,30 @@ const Upload = () => {
       (console.log("Err:", err),
         Toast.show({
           type: "error",
-          text1: `Error uploading post`,
+          text1: err.message ?? `Error uploading post`,
           position: "top",
         }));
     },
   });
 
-  const upload = async(uri:string | null)=>{
-    const formData = new FormData()
-    formData.append('posts',{
-      uri,
-      name:`${Date.now()}`,
-      type:'image/jpeg'
-    } as any)
-    // formData.append('caption',caption)
-    // formData.append('location',location)
-    await mutate(formData)
-  }
+  const onSubmit = async (data: IPostData) => {
+    const { location, caption } = data;
+
+    const formData = new FormData();
+    // appending uri's saved to our state:
+    console.log(imageUri)
+    imageUri.forEach((uri,index) => {
+      formData.append("photos", {
+        uri,
+        name: `${Date.now()}_${index}.jpg`,
+        type: "image/jpeg",
+      } as any);
+    });
+    formData.append("caption", caption);
+    formData.append("location", location);
+    await mutate(formData);
+    console.log(`mutated func`);
+  };
 
   return (
     <ScrollView
@@ -97,7 +128,10 @@ const Upload = () => {
             <Text className="text-white text-2xl">X</Text>
           </TouchableOpacity>
           <Text className="text-xl text-white font-semibold">New Post</Text>
-          <TouchableOpacity activeOpacity={0.8}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={handleSubmit(onSubmit)}
+          >
             <LinearGradient
               colors={["#9333EA", "#7C3AED", "#6D28D9"]}
               start={{ x: 0, y: 0 }}
@@ -138,21 +172,39 @@ const Upload = () => {
         {/* Add Location Input */}
         <View className="mt-6 w-[95vw] self-center rounded-md border border-border2 flex-row gap-1 items-center shadow-xl pl-2 bg-post">
           <MapPin color={"#8B5CF6"} size={20} />
-          <TextInput
-            placeholder="Add Location (e.g Boudha Stupa)"
-            placeholderTextColor="#9CA3AF"
-            className="flex-1 text-white text-xl"
+          <Controller
+            control={control}
+            name="location"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Add Location (e.g Boudha Stupa)"
+                placeholderTextColor="#9CA3AF"
+                className="flex-1 text-white text-xl"
+              />
+            )}
           />
         </View>
 
         {/* Caption Input */}
         <View className="mt-8 w-[95vw] self-center rounded-md border border-border2 flex-row gap-1 items-start shadow-xl p-3 bg-post">
-          <TextInput
-            placeholder="Write a brief caption about your post...."
-            placeholderTextColor="#9CA3AF"
-            className="flex-1 text-white text-xl"
-            multiline
-            style={{ minHeight: 100, textAlignVertical: "top" }}
+          <Controller
+            control={control}
+            name="caption"
+            render={({ field: { onBlur, onChange, value } }) => (
+              <TextInput
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Write a brief caption about your post...."
+                placeholderTextColor="#9CA3AF"
+                className="flex-1 text-white text-xl"
+                multiline
+                style={{ minHeight: 100, textAlignVertical: "top" }}
+              />
+            )}
           />
         </View>
 
@@ -185,7 +237,7 @@ const Upload = () => {
                 <Text className="text-secondary">
                   You are able to share up to 10 photos, select some good
                   pictures from your trips and let others see them. It is
-                  advised that your photos are clear and clearly convey the
+                  advised that your photos are clear and easily convey the
                   message you want to get across.
                 </Text>
               </View>
