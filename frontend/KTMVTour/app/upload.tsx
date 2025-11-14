@@ -3,11 +3,18 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  Image,
   ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
-import { Image, LucideDot, MapPin } from "lucide-react-native";
+import {
+  Image as ImageIcon,
+  LucideDot,
+  MapPin,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as ImagePicker from "expo-image-picker";
 import { useMutation } from "@tanstack/react-query";
@@ -21,6 +28,25 @@ import { IPostData } from "@/src/types/post.types";
 const Upload = () => {
   // building a state to store the image uri's until it's time to append them
   const [imageUri, setImageUri] = useState<string[]>([]);
+  const [currentImageindex, setCurrentImageIndex] = useState(0);
+
+  const incrementIndex = () => {
+    // check if the index even has a file first...
+    if (imageUri[currentImageindex + 1] === undefined) {
+      return;
+    } else {
+      setCurrentImageIndex(currentImageindex + 1);
+    }
+  };
+
+  const decrementIndex = () => {
+    // check if the index even has a file first...
+    if (imageUri[currentImageindex - 1] === undefined) {
+      return;
+    } else {
+      setCurrentImageIndex(currentImageindex - 1);
+    }
+  };
 
   const handleUploadPhotos = async () => {
     try {
@@ -97,8 +123,8 @@ const Upload = () => {
 
     const formData = new FormData();
     // appending uri's saved to our state:
-    console.log(imageUri)
-    imageUri.forEach((uri,index) => {
+    console.log(imageUri);
+    imageUri.forEach((uri, index) => {
       formData.append("photos", {
         uri,
         name: `${Date.now()}_${index}.jpg`,
@@ -144,17 +170,40 @@ const Upload = () => {
         </View>
 
         {/* Preview Section */}
-        <View className="border-2 border-dashed border-six mt-2 p-16 items-center justify-center gap-6 w-[95vw] self-center rounded-md">
-          <View className="p-5 bg-seven w-24 items-center rounded-full border border-button">
-            <Image color={"#8B5CF6"} size={48} />
+        {imageUri.length > 0 ? (
+          <View className="mt-6 items-center justify-center gap-6 w-[95vw] self-center rounded-md">
+            <Image
+              source={{ uri: imageUri[currentImageindex] }}
+              style={{ width: "100%", aspectRatio: 9 / 16 }}
+              resizeMode="cover"
+            />
+            {/* Navigation Buttons */}
+            <View className="flex-row justify-between w-full px-2 mb-2">
+              <TouchableOpacity activeOpacity={0.8} onPress={decrementIndex}>
+                <View className="bg-card rounded-full p-3">
+                  <ChevronLeft color="#FFFFFF" size={24} />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.8} onPress={incrementIndex}>
+                <View className="bg-card rounded-full p-3">
+                  <ChevronRight color="#FFFFFF" size={24} />
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View className="items-center gap-2">
-            <Text className="text-white text-2xl">No Photos Selected</Text>
-            <Text className="text-purple-300 font-semibold">
-              Tap Below to Add Photos
-            </Text>
+        ) : (
+          <View className="border-2 border-dashed border-six mt-2 items-center p-16 justify-center gap-6 w-[95vw] self-center rounded-md">
+            <View className="p-5 bg-seven w-24 items-center rounded-full border border-button">
+              <ImageIcon color={"#8B5CF6"} size={48} />
+            </View>
+            <View className="items-center gap-2">
+              <Text className="text-white text-2xl">No Photos Selected</Text>
+              <Text className="text-purple-300 font-semibold">
+                Tap Below to Add Photos
+              </Text>
+            </View>
           </View>
-        </View>
+        )}
 
         {/* Select Photos Button */}
         <TouchableOpacity activeOpacity={0.8} onPress={handleUploadPhotos}>
@@ -164,7 +213,7 @@ const Upload = () => {
             end={{ x: 1, y: 0 }}
             className="mt-6 w-[95vw] self-center rounded-md border border-border2 flex-row gap-2 items-center shadow-xl justify-center p-3"
           >
-            <Image color={"#8B5CF6"} />
+            <ImageIcon color={"#8B5CF6"} />
             <Text className="text-white text-xl ">Select Photos</Text>
           </LinearGradient>
         </TouchableOpacity>
