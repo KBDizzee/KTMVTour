@@ -14,6 +14,7 @@ import {
   MapPin,
   ChevronLeft,
   ChevronRight,
+  Trash2,
 } from "lucide-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as ImagePicker from "expo-image-picker";
@@ -46,6 +47,24 @@ const Upload = () => {
     } else {
       setCurrentImageIndex(currentImageindex - 1);
     }
+  };
+
+  const handleDelPhoto = () => {
+    if (imageUri.length === 0) return;
+
+    const index2Remove = currentImageindex;
+    const newImageUri = imageUri.filter((_, index) => index !== index2Remove);
+    
+    setImageUri(newImageUri);
+    
+    // Adjust current index if needed
+    if (newImageUri.length === 0) {
+      setCurrentImageIndex(0);
+    } else if (currentImageindex >= newImageUri.length) {
+      // If we deleted the last item, go back one
+      setCurrentImageIndex(newImageUri.length - 1);
+    }
+    // Otherwise, stay at the same index (which now shows the next image)
   };
 
   const handleUploadPhotos = async () => {
@@ -184,6 +203,14 @@ const Upload = () => {
                   <ChevronLeft color="#FFFFFF" size={24} />
                 </View>
               </TouchableOpacity>
+              {/* Delete Button */}
+              <View className="items-center mb-2">
+                <TouchableOpacity activeOpacity={0.8} onPress={handleDelPhoto}>
+                  <View className="bg-card rounded-full p-3">
+                    <Trash2 color="#ef4444" size={24} />
+                  </View>
+                </TouchableOpacity>
+              </View>
               <TouchableOpacity activeOpacity={0.8} onPress={incrementIndex}>
                 <View className="bg-card rounded-full p-3">
                   <ChevronRight color="#FFFFFF" size={24} />
