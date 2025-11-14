@@ -1553,3 +1553,5 @@ formData.append("photos", {
 ## 14 NOV 25
 
 - Nah im kinda dead today, I won't work on the preview today, it'll have to be tomorrow.
+
+- Nvm, i got the preview done. Just need to add the delete button, I'll finish that off now too. So I think the upload posts is done. I just need to catch some bugs and fix them if I find any... besides that it's done.
