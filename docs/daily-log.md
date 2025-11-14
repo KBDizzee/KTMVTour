@@ -1549,3 +1549,7 @@ formData.append("photos", {
 - I probably won't be able to get much done, but tomorrow if I can get the preview working for the upload posts, then that's the upload posts working and I can move onto fetching the feed. But yeah, i just have the preview left for upload posts page and then testing and make sure it is bug free and then i'll move on. The latest I will have to finish the upload posts page is till saturday. Hopefully I can finish that tomorrow so saturday I can move onto loading the feed (without redis).
 
 - Oh btw I also added the location column to my posts table. So yeah, in regards to yesterdays concern about hash tags, I can just use location instead, so places featured most in location for that day will show on home page. But then I need everyone to type the same location e.g boudha and Boudha Stupa must just count as one, im sure I can do that or i'll just add some enums for fixed location places, or I'll add gps feature or something... who knows, that's for later. Anyways, im happy with what I got done today.
+
+## 14 NOV 25
+
+- Nah im kinda dead today, I won't work on the preview today, it'll have to be tomorrow.
