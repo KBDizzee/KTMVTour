@@ -4,7 +4,7 @@ import Feed from "@/components/community/Feed";
 
 const community = () => {
   return (
-    <View className="flex-1 bg-black pt-8">
+    <View className="flex-1 bg-black">
       {/* Feed */}
       <Feed />
     </View>
