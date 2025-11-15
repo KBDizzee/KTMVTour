@@ -1,26 +1,50 @@
-import { View, Text, Image, Dimensions, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState } from "react";
-import { useAuthStore } from "@/src/store/auth.store";
 import { MapPin, Heart, MessageCircle, Share2 } from "lucide-react-native";
 import AddPostButton from "./addPostButton";
+import { useQuery } from "@tanstack/react-query";
+import { feedAPI } from "@/src/api/feed.api";
 
 const Feed = () => {
-  const { user } = useAuthStore();
   const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
   const [isCaptionExpanded, setIsCaptionExpanded] = useState(false);
+  const [photo,setPhoto] = useState<string[]>()
+
+  const { data, isPending } = useQuery({
+    queryFn: feedAPI,
+    queryKey: ["feed_API"],
+  });
+
+  if (isPending) {
+    return (
+      <View className="flex items-center justify-center h-screen bg-black">
+        <ActivityIndicator size={"large"} color={"#8B5CF6"} />
+      </View>
+    );
+  }
+  
+  const photoUrls = data.data[0].photos.map((photo: any) => photo.url);
+  
 
   return (
     <View className="flex-1">
       {/* Main image section - Full screen */}
       <View className="absolute inset-0">
-        <Image
-          source={require("@/assets/sample-images/photo-1581260466152-d2c0303e54f5.jpeg")}
-          style={{
-            width: screenWidth,
-            height: screenHeight,
-            resizeMode: "cover",
-          }}
-        />
+          <Image
+            source={{ uri: photoUrls[0]}}
+            style={{
+              width: screenWidth,
+              height: screenHeight,
+              resizeMode: "cover",
+            }}
+          />
       </View>
 
       {/* Header Section - Overlay on top */}
@@ -28,9 +52,9 @@ const Feed = () => {
         <View className="flex-row gap-2 items-center pl-2">
           {/* profile pictrue */}
           <View className="w-12 bg-third rounded-full border-2 border-secondary items-center">
-            {user?.profilePicture && user?.profilePicture.path ? (
+            {data?.data?.[0]?.user?.profilePicture?.path ? (
               <Image
-                source={{ uri: user?.profilePicture.path }}
+                source={{ uri: data.data[0].user.profilePicture.path }}
                 style={{
                   width: 40,
                   height: 40,
@@ -54,11 +78,13 @@ const Feed = () => {
           {/* Text section */}
           <View className="flex">
             <Text className="text-white text-xl pl-1 font-semibold">
-              {user?.username}
+              {data?.data?.[0]?.user?.username || ""}
             </Text>
             <View className="flex-row items-center gap-1">
               <MapPin color={"#9ca3af"} size={14} />
-              <Text className="text-white">Location</Text>
+              <Text className="text-white">
+                {data?.data?.[0]?.location || ""}
+              </Text>
             </View>
           </View>
         </View>
@@ -75,7 +101,7 @@ const Feed = () => {
           >
             <Heart color="#ffffff" size={24} fill="none" />
           </TouchableOpacity>
-          <Text className="text-white">2.3k</Text>
+          <Text className="text-white">{data?.data?.[0]?.likeCount || 0}</Text>
         </View>
 
         <View className="flex items-center">
@@ -85,7 +111,9 @@ const Feed = () => {
           >
             <MessageCircle color="#ffffff" size={24} fill="none" />
           </TouchableOpacity>
-          <Text className="text-white">89</Text>
+          <Text className="text-white">
+            {data?.data?.[0]?.commentCount || 0}
+          </Text>
         </View>
 
         <TouchableOpacity
@@ -106,17 +134,7 @@ const Feed = () => {
             className="text-white text-[15px] font-semibold"
             numberOfLines={isCaptionExpanded ? undefined : 3}
           >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime
-            corporis debitis quis in optio, veritatis soluta vitae harum maiores
-            sunt dolores obcaecati earum porro doloremque nobis quae quibusdam
-            expedita dicta aperiam natus voluptate! Maiores iure quibusdam rem
-            ipsum! Cupiditate magnam aut necessitatibus, a vel atque voluptate hic
-            veritatis temporibus non esse, quo nostrum mollitia iste voluptates
-            nemo nesciunt. Eligendi alias sint quod, voluptas nulla quas, quos
-            nostrum minus repudiandae assumenda a quam, sed reiciendis odit
-            suscipit maxime. Exercitationem facilis et quas est laborum voluptas
-            enim quia. Laudantium expedita aperiam quod, nisi repellendus debitis
-            fugit nostrum. Magnam repellendus fugit praesentium ex.
+            {data?.data?.[0]?.caption || ""}
           </Text>
         </TouchableOpacity>
       </View>
