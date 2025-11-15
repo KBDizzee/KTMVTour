@@ -1,12 +1,12 @@
 import { View, Text } from "react-native";
 import React from "react";
-import AddPostButton from "@/components/community/addPostButton";
+import Feed from "@/components/community/Feed";
 
 const community = () => {
   return (
-    <View className="flex-1 items-center pt-8 bg-black">
-      {/* Add your post */}
-      <AddPostButton />
+    <View className="flex-1 bg-black pt-8">
+      {/* Feed */}
+      <Feed />
     </View>
   );
 };

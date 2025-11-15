@@ -11,7 +11,6 @@ const AddPostButton = () => {
   const [buttonClicked, setButtonClicked] = useState(false);
 
   const handleClick = () => {
-    console.log(`Clicked`);
     setButtonClicked(true);
     router.push('/upload')
   };

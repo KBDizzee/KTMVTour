@@ -100,7 +100,7 @@ const Upload = () => {
   };
 
   const handleBackClick = () => {
-    router.back();
+    router.push('/community')
   };
 
   const {
@@ -321,8 +321,7 @@ const Upload = () => {
                 <LucideDot color={"#fff"} />
                 <Text className="text-secondary">
                   For any feature requests or problems please contact our
-                  support team at support@ktmvtour.com or through the app
-                  settings.
+                  support team at ktmvtour@gmail.com, any feedback,issue or concern is greatly appreciated.
                 </Text>
               </View>
             </View>
