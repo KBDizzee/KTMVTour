@@ -1555,3 +1555,106 @@ formData.append("photos", {
 - Nah im kinda dead today, I won't work on the preview today, it'll have to be tomorrow.
 
 - Nvm, i got the preview done. Just need to add the delete button, I'll finish that off now too. So I think the upload posts is done. I just need to catch some bugs and fix them if I find any... besides that it's done.
+
+## 15 NOV 25
+
+- Goal for today is to implement the styling for the feed and also get a feed going.
+
+- I got the frontend styling done for the feed, now I'll just have to call the api on the backend and display the photo, caption username etc..
+
+- Also later on I need to change this, I need to let the user access the app without logging in, only if they aren't logged in and they click profile option try to upload,like post or comment on post then they need to login. A lot of people won't just want to signup/login and if I make them have to login to access the app they won't bother using it at all.
+
+- Alright I can't finish off all the feed today, I will need to split it over another day or two to get it fully working.
+
+## 16 Nov 25
+
+- Continue working on the feed.
+
+- Ok, i kind of ran into many problems with this. But at the end I ended up using useInfiniteQuery from react query to load all the posts from our backend and flatList to make sure we don't load all posts all at once since that would be very inefficient if say we had 2000 posts then it would take so long to load the posts. So flat list helps with that problem by just loading a few of those 2000 at a time and as user scrolls we load more...
+
+- This is how I implemented it:
+```TypeScript
+import { View, FlatList, ActivityIndicator, Dimensions } from "react-native";
+import React from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { feedAPI } from "@/src/api/feed.api";
+import PostItem from "./postItem";
+
+const screenHeight = Dimensions.get("window").height;
+
+const Feed = () => {
+  const {
+    data,
+    isPending,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    error,
+  } = useInfiniteQuery({
+    queryKey: ["feed_API"],
+    queryFn: ({ pageParam = 1 }) => {
+      return feedAPI(pageParam);
+    },
+    getNextPageParam: (lastPage) => {
+      // Using next_page from backend response
+      if (lastPage?.pagination?.has_next_page) {
+        const nextPage = lastPage.pagination.next_page;
+        return nextPage;
+      }
+      return undefined;
+    },
+    initialPageParam: 1,
+  });
+
+  // Flatten all pages into a single array of posts
+  const allPosts = data?.pages.flatMap((page) => page.data) ?? [];
+
+  const loadMorePosts = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    } else {
+      console.log("Cant load anymore:", { hasNextPage, isFetchingNextPage });
+    }
+  };
+  if (isPending) {
+    return (
+      <View className="flex items-center justify-center h-screen bg-black">
+        <ActivityIndicator size={"large"} color={"#8B5CF6"} />
+      </View>
+    );
+  }
+
+  return (
+    <View className="flex-1">
+      <FlatList
+        data={allPosts}
+        renderItem={({ item }: { item: any }) => <PostItem post={item} />}
+        keyExtractor={(item: any) => item.id}
+        // Vertical paging:
+        pagingEnabled={true}
+        snapToInterval={screenHeight}
+        decelerationRate="fast"
+        showsVerticalScrollIndicator={false}
+        // Load more posts:
+        onEndReached={loadMorePosts}
+        onEndReachedThreshold={0.5}
+        // Loading indicator:
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <View
+              style={{ height: screenHeight }}
+              className="items-center justify-center"
+            >
+              <ActivityIndicator size="large" color="#8B5CF6" />
+            </View>
+          ) : null
+        }
+      />
+    </View>
+  );
+};
+
+export default Feed;
+```
+
+- I need to just get this full screen thing working on andriod so The layout looks clean..
