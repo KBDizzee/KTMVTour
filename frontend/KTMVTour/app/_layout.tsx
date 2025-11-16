@@ -3,7 +3,8 @@ import "./globals.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthStore } from "@/src/store/auth.store";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, Text, View, Platform } from "react-native";
+import * as NavigationBar from "expo-navigation-bar";
 import Toast from "react-native-toast-message";
 import { CircleAlertIcon, CircleCheck } from "lucide-react-native";
 
@@ -32,6 +33,11 @@ export default function RootLayout() {
 
   useEffect(() => {
     const init = async () => {
+      // Set Android navigation bar to immersive mode
+      if (Platform.OS === "android") {
+        await NavigationBar.setVisibilityAsync("hidden");
+        NavigationBar.setBehaviorAsync("overlay-swipe");
+      }
       await checkAuth();
       setIsLoading(false);
     };

@@ -1,27 +1,52 @@
-import {
-  View,
-  Text,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
-import React, { useState } from "react";
-import { MapPin, Heart, MessageCircle, Share2 } from "lucide-react-native";
-import AddPostButton from "./addPostButton";
-import { useQuery } from "@tanstack/react-query";
+import { View, FlatList, ActivityIndicator, Dimensions, Text } from "react-native";
+import React from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { feedAPI } from "@/src/api/feed.api";
+import PostItem from "./postItem";
+
+const screenHeight = Dimensions.get("window").height;
 
 const Feed = () => {
-  const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
-  const [isCaptionExpanded, setIsCaptionExpanded] = useState(false);
-  const [photo,setPhoto] = useState<string[]>()
-
-  const { data, isPending } = useQuery({
-    queryFn: feedAPI,
+  const {
+    data,
+    isPending,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    error,
+  } = useInfiniteQuery({
     queryKey: ["feed_API"],
+    queryFn: ({ pageParam = 1 }) => {
+      return feedAPI(pageParam);
+    },
+    getNextPageParam: (lastPage) => {
+      // Using next_page from backend response
+      if (lastPage?.pagination?.has_next_page) {
+        const nextPage = lastPage.pagination.next_page;
+        return nextPage;
+      }
+      return undefined;
+    },
+    initialPageParam: 1,
   });
 
+  // Flatten all pages into a single array of posts
+  const allPosts = data?.pages.flatMap((page) => page.data) ?? [];
+
+  // Optimize FlatList performance with getItemLayout
+  const getItemLayout = (_: any, index: number) => ({
+    length: screenHeight,
+    offset: screenHeight * index,
+    index,
+  });
+
+  const loadMorePosts = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    } else {
+      console.log("Cant load anymore:", { hasNextPage, isFetchingNextPage });
+    }
+  };
   if (isPending) {
     return (
       <View className="flex items-center justify-center h-screen bg-black">
@@ -29,115 +54,46 @@ const Feed = () => {
       </View>
     );
   }
-  
-  const photoUrls = data.data[0].photos.map((photo: any) => photo.url);
-  
 
   return (
     <View className="flex-1">
-      {/* Main image section - Full screen */}
-      <View className="absolute inset-0">
-          <Image
-            source={{ uri: photoUrls[0]}}
-            style={{
-              width: screenWidth,
-              height: screenHeight,
-              resizeMode: "cover",
-            }}
-          />
-      </View>
-
-      {/* Header Section - Overlay on top */}
-      <View className="absolute top-0 left-0 right-0 flex flex-row items-center justify-between pr-4 pt-8 z-10">
-        <View className="flex-row gap-2 items-center pl-2">
-          {/* profile pictrue */}
-          <View className="w-12 bg-third rounded-full border-2 border-secondary items-center">
-            {data?.data?.[0]?.user?.profilePicture?.path ? (
-              <Image
-                source={{ uri: data.data[0].user.profilePicture.path }}
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 50,
-                  resizeMode: "cover",
-                }}
-              />
-            ) : (
-              <Image
-                source={require("@/assets/sample-images/no-profile.png")}
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 50,
-                  resizeMode: "cover",
-                }}
-              />
-            )}
-          </View>
-
-          {/* Text section */}
-          <View className="flex">
-            <Text className="text-white text-xl pl-1 font-semibold">
-              {data?.data?.[0]?.user?.username || ""}
-            </Text>
-            <View className="flex-row items-center gap-1">
-              <MapPin color={"#9ca3af"} size={14} />
-              <Text className="text-white">
-                {data?.data?.[0]?.location || ""}
+      <FlatList
+        data={allPosts}
+        renderItem={({ item }: { item: any }) => <PostItem post={item} />}
+        keyExtractor={(item: any) => item.id}
+        getItemLayout={getItemLayout}
+        // Vertical paging:
+        pagingEnabled={true}
+        snapToInterval={screenHeight}
+        decelerationRate="fast"
+        showsVerticalScrollIndicator={false}
+        // Load more posts:
+        onEndReached={loadMorePosts}
+        onEndReachedThreshold={0.5}
+        // Loading indicator or end message:
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <View
+              style={{ height: screenHeight }}
+              className="items-center justify-center"
+            >
+              <ActivityIndicator size="large" color="#8B5CF6" />
+            </View>
+          ) : !hasNextPage && allPosts.length > 0 ? (
+            <View
+              style={{ height: screenHeight }}
+              className="items-center justify-center bg-black px-6"
+            >
+              <Text className="text-white text-center text-lg font-semibold">
+                That's all we have for now!
+              </Text>
+              <Text className="text-white text-center text-base mt-4 opacity-80">
+                Please share your experience to keep the community active.
               </Text>
             </View>
-          </View>
-        </View>
-
-        <AddPostButton />
-      </View>
-
-      {/* Like + comment + share buttons */}
-      <View className="flex absolute right-0 bottom-[35%] p-3 gap-6">
-        <View className="flex items-center">
-          <TouchableOpacity
-            className="w-12 h-12 rounded-full bg-black/40 backdrop-blur-sm items-center justify-center"
-            activeOpacity={0.7}
-          >
-            <Heart color="#ffffff" size={24} fill="none" />
-          </TouchableOpacity>
-          <Text className="text-white">{data?.data?.[0]?.likeCount || 0}</Text>
-        </View>
-
-        <View className="flex items-center">
-          <TouchableOpacity
-            className="w-12 h-12 rounded-full bg-black/40 backdrop-blur-sm items-center justify-center"
-            activeOpacity={0.7}
-          >
-            <MessageCircle color="#ffffff" size={24} fill="none" />
-          </TouchableOpacity>
-          <Text className="text-white">
-            {data?.data?.[0]?.commentCount || 0}
-          </Text>
-        </View>
-
-        <TouchableOpacity
-          className="w-12 h-12 rounded-full bg-black/40 backdrop-blur-sm items-center justify-center"
-          activeOpacity={0.7}
-        >
-          <Share2 color="#ffffff" size={24} fill="none" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Caption Section */}
-      <View className="flex absolute bottom-0 left-0 w-[90vw] p-4">
-        <TouchableOpacity
-          onPress={() => setIsCaptionExpanded(!isCaptionExpanded)}
-          activeOpacity={0.8}
-        >
-          <Text
-            className="text-white text-[15px] font-semibold"
-            numberOfLines={isCaptionExpanded ? undefined : 3}
-          >
-            {data?.data?.[0]?.caption || ""}
-          </Text>
-        </TouchableOpacity>
-      </View>
+          ) : null
+        }
+      />
     </View>
   );
 };
