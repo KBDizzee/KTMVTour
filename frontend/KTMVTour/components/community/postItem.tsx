@@ -1,7 +1,8 @@
 import { View, Text, Dimensions, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
-import { Heart, MapPin, MessageCircle, Share2 } from "lucide-react-native";
+import { MapPin, MessageCircle, Share2 } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import PagerView from "react-native-pager-view";
 import AddPostButton from "./addPostButton";
 import LikeComponent from "./likeComponent";
 
@@ -35,18 +36,24 @@ const PostItem = ({ post }: PostItemProps) => {
     <View style={{ height: screenHeight }}>
       {/* Main image section - Full screen */}
       <View className="absolute inset-0">
-        <Image
-          source={{ uri: photoUrls[0] }}
-          style={{
-            width: screenWidth,
-            height: screenHeight,
-            resizeMode: "cover",
-          }}
-        />
+        <PagerView style={{ flex: 1 }} initialPage={0}>
+          {photoUrls.map((url,index) => (
+            <View key={index}>
+              <Image
+                source={{ uri: url}}
+                style={{
+                  width: screenWidth,
+                  height: screenHeight,
+                  resizeMode: "cover",
+                }}
+              />
+            </View>
+          ))}
+        </PagerView>
       </View>
 
       {/* Header Section - Overlay on top */}
-      <View className="absolute top-0 left-0 right-0 flex flex-row items-center justify-between pr-4 pt-12 z-10">
+      <View className="absolute top-0 left-0 right-0 flex flex-row items-center justify-between pr-4 pt-8 z-10">
         <View className="flex-row gap-2 items-center pl-2">
           {/* profile pictrue */}
           <View className="w-12 bg-third rounded-full border-2 border-secondary items-center">
@@ -113,9 +120,9 @@ const PostItem = ({ post }: PostItemProps) => {
       </View>
 
       {/* Caption Section */}
-      <View 
+      <View
         className="flex absolute bottom-0 left-0 w-[90vw] p-4"
-        style={{ paddingBottom: insets.bottom}}
+        style={{ paddingBottom: insets.bottom }}
       >
         <TouchableOpacity
           onPress={() => setIsCaptionExpanded(!isCaptionExpanded)}
