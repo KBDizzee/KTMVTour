@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Heart, MapPin, MessageCircle, Share2 } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AddPostButton from "./addPostButton";
+import LikeComponent from "./likeComponent";
 
 interface PostItemProps {
   post: {
@@ -91,15 +92,7 @@ const PostItem = ({ post }: PostItemProps) => {
 
       {/* Like + comment + share buttons */}
       <View className="flex absolute right-0 bottom-[35%] p-3 gap-6">
-        <View className="flex items-center">
-          <TouchableOpacity
-            className="w-12 h-12 rounded-full bg-black/40 backdrop-blur-sm items-center justify-center"
-            activeOpacity={0.7}
-          >
-            <Heart color="#ffffff" size={24} fill="none" />
-          </TouchableOpacity>
-          <Text className="text-white">{post.likeCount || 0}</Text>
-        </View>
+        <LikeComponent post={post} />
 
         <View className="flex items-center">
           <TouchableOpacity
