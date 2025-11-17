@@ -1658,3 +1658,11 @@ export default Feed;
 ```
 
 - I need to just get this full screen thing working on andriod so The layout looks clean..
+
+## 17 Nov 25
+
+- I'll just try to connect the like feature from backend to frontend today and then tomorrow I can work on the horizontal swipe part, after that it's comments and then redis. Also I'll try to grab some images for landmark B. 
+
+- The like functionality is added I guess, wasn't hard or anything but now the problem is how do I update the number of likes etc.
+without having the user reload the app... I think I have to use web sockets for that, or maybe there is an easier way out?? It'll 
+prolly be web sockets though most likely.
