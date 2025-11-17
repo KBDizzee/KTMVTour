@@ -22,8 +22,10 @@ const LikeComponent = ({ post }: PostLikeType) => {
   // for some seconds/milliseconds.. until react query gives us data from backend...
   const [liked, setIsLiked] = useState(false);
 
+  const [likeCount,setLikeCount] = useState(post.likeCount)
+
   // Even though we have the data from backend, our liked state doesn't automatically update...
-  // so this useEffect updates the state based when and on backend status updates. It's like u ask 
+  // so this useEffect updates the state based when and on backend status updates. It's like u ask
   // someone yo is this post liked, they don't respond instantaneously it takes them maybe a second or two
   // and you assume their answer is no in that time and when they answer you use the useEffect to update it.
   useEffect(() => {
@@ -45,9 +47,11 @@ const LikeComponent = ({ post }: PostLikeType) => {
     if (liked === false) {
       setIsLiked(true);
       mutate();
+      setLikeCount((currentNumofLikes)=> currentNumofLikes + 1)
     } else {
       setIsLiked(false);
       unlike();
+      setLikeCount((currentNumofLikes)=> currentNumofLikes - 1)
     }
   };
 
@@ -65,7 +69,7 @@ const LikeComponent = ({ post }: PostLikeType) => {
       >
         <Heart color="#ffffff" size={24} fill="none" />
       </TouchableOpacity>
-      <Text className="text-white">{post.likeCount || 0}</Text>
+      <Text className="text-white">{likeCount}</Text>
     </View>
   );
 };
