@@ -1675,3 +1675,5 @@ prolly be web sockets though most likely.
 
 
 - I installed the pager view and added it for horizontal swiping, but I gotta rebuild my app for it to take effect. In the mean time, I'll just do some other things...
+
+- The horizontal swipe is working. Pager View is working successfully what's left is to add the dots to the screen. I'll probably just do that tomorrow though and then from there it's about adding comments to the peice of code. 
