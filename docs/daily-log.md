@@ -1676,4 +1676,9 @@ prolly be web sockets though most likely.
 
 - I installed the pager view and added it for horizontal swiping, but I gotta rebuild my app for it to take effect. In the mean time, I'll just do some other things...
 
-- The horizontal swipe is working. Pager View is working successfully what's left is to add the dots to the screen. I'll probably just do that tomorrow though and then from there it's about adding comments to the peice of code. 
+- The horizontal swipe is working. Pager View is working successfully what's left is to add the dots to the screen. I'll probably just do that tomorrow though and then from there it's about adding comments to the peice of code.
+
+- How it will work with the horizontal dots, is we have it return dots = length of photo urls array. So it should show like e.g 5 dots if there's 5 urls for one post. Then we can have a state that says, currentPage that starts at 0 index (1st element) and everytime we swipe right we increment by 1 and have the currentPage dot highlighted and everytime we swipe left we decrement by 1 and have the new currentPage highlighted.
+
+- That's one approach, but there's no way we can just track if user swiped left or right? Hmm, there is this thing called onPageSelected within React native, I think it may be useful for what im trying to do. My backend isn't even loading right now, 
+I think render is experiencing heavy traffic rn or something like that idk but it's not loading. Wait, what if I load my container then I created on docker, will it fix this problem? no nvm because that's running on local host and my frontend is connected to the deployed backend. Oh well, it's not working tn. I'll add the dots tomorrow.. shouldn't be too hard.
