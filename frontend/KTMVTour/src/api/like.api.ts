@@ -4,7 +4,6 @@ export const likeAPI = async(id:string)=>{
   try{
     console.log('like api func hit')
     const response = await api.post(`/social/${id}/like`)
-    console.log(response.data)
     return response.data
   }catch(err:any){
     throw err.response.data
@@ -15,7 +14,6 @@ export const unlikeAPI = async(id:string)=>{
   try{ 
     console.log(`unlike api func hit`)
     const response = await api.delete(`/social/${id}/unlike`)
-    console.log(response.data)
     return response.data
   }catch(err:any){
     throw err.response.data
@@ -25,7 +23,6 @@ export const unlikeAPI = async(id:string)=>{
 export const checkIfLikedAPI = async(id:string)=>{
   try{
     const response = await api.get(`/social/${id}/checkLiked`)
-    console.log(`Liked api Reponse data: ${response.data.data}`)
     return response.data
   }catch(err:any){
     throw err.response.data

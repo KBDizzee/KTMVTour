@@ -55,8 +55,6 @@ const LikeComponent = ({ post }: PostLikeType) => {
     }
   };
 
-  console.log(`This post ${post.id} is liked:`, data);
-
   return (
     <View className="flex items-center">
       <TouchableOpacity
