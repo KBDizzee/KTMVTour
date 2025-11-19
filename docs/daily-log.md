@@ -1719,3 +1719,17 @@ const [currentImage, setCurrentImage] = useState<number>(0);
 ```
 
 - Alright, I got that in here, I think i need to rebuild my app though. Nah nvm. Anyways, this is complete enough for MVP. I'll move onto the comments backend now. and then implement the comments. Idk if I wrote on here but I don't need web sockets, cause it's not live comments like on twitch or titkok live. You can't see live comments on tiktok aswell on videos, only on live. The comments you see are just whats loaded when u load the video. Someone may've commented while you were watching that video. You won't be able to see it until you refresh.. So i just need the comments working and then idek if I should worry about redis rn. I can deal with that later when it comes to it. I just want to get the landmark detection model implemented within the app and then from there is should be soon ready for launch and i'll continue adding features after launch.
+
+- For prevention against DDos for e.g I can also just put this whole thing behind cloudflare even though it'll just be a SPOF, but I don't have to worry about it since it won't mean much atm if the security of my app isn't 100% unbeatable. But I may add rate limiting using express rate limit library aswell just before launch. I don't think im too far off launching this now.
+
+- Also after launch I should also think about replicating dbs and having the master/slaves going on, that's all after I get users.
+
+- You know what, I was also reading system design book yesterday and alex xu just said this is when you can/should use non-relational db, i won't have massive amounts of data, so I think my postgres is cool for now and even until a while later, I just don't know what amount of data can be classified as massive:
+
+![alt text](./images-for-log/image26.png)
+
+- I got comments, backend done for posting comment. Now lemme just style a modal rq.
+
+- I completely forgot I needed an api to fetch the all the comments for posts, so I added that API and all comments are being fetched. Now I need to load it into frontend. I think I will also have to use flatlist, like for loading posts. I have the pagination limit set to 20. SO it loads 20 comments. I think flatlist is the way to go for these comments..
+
+- I'll add that quickly tomorrow. I'll have claude help with some frontend styling, the parts I already know to speed up the process.
