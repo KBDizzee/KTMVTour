@@ -928,26 +928,28 @@ useEffect(() => {
 
 ## 26 OCT 25
 
-- Ok I couldn't see the camera yesterday because I didn't set a height and width. I was just playing around with borderwidth because I thought I wouldn't be able to see the camera on my emulator, so I  just wanted an idea of where the camera would be by setting a border. However i set borderWidth 4 first and then I seen something appear, I increased it more and seen the camera come. So boom then I got it setup.
+- Ok I couldn't see the camera yesterday because I didn't set a height and width. I was just playing around with borderwidth because I thought I wouldn't be able to see the camera on my emulator, so I just wanted an idea of where the camera would be by setting a border. However i set borderWidth 4 first and then I seen something appear, I increased it more and seen the camera come. So boom then I got it setup.
 
 - With that being said, I was going to ask figma to give me a nice design for my tours page, but it looks like im out of credits until Nov 1. So maybe, i'll just wait until then to style the tours page.
 
 - Ok im just thinking right now and maybe instead of having our take me to nearby landmark button search for automatically route user to first search that comes up when we do take me to nearby landmark. But nah that's not good, because what if user doesn't want to go to that.
-I think it's better if we let user decide. So keep it as is for now.
+  I think it's better if we let user decide. So keep it as is for now.
 
 - When i did password select false on my user model I forgot to add select password after like user.findone(id) so bcrypt got undefined/null user password hence why it was throwing the data and hash arguments required.
 
 - I got some images into the dataset aswell today, but now I gotta start gaining an understanding of how I can connect the tf lite model when ready to my rn vision camera. I asked a question on discord about this and some guy responded to me saying:
 
-    It’s just running the model every frame
-    If you don’t want to run the model every frame, do a frame by frame comparison like structural similarity index
-So now im guessing if I just import the model It'll work how I want it to because it's running the model every frame? Who knows though, i'll have to dive deeper into it later.
+      It’s just running the model every frame
+      If you don’t want to run the model every frame, do a frame by frame comparison like structural similarity index
+
+  So now im guessing if I just import the model It'll work how I want it to because it's running the model every frame? Who knows though, i'll have to dive deeper into it later.
 
 ## 27 OCT 25
 
-- So im currently getting this error from yesterday: 
+- So im currently getting this error from yesterday:
+
 ```bash
- ERROR  [Invariant Violation: View config not found for component `AIRMap`] 
+ ERROR  [Invariant Violation: View config not found for component `AIRMap`]
 
 Call Stack
   invariant (node_modules\invariant\browser.js)
@@ -1048,7 +1050,7 @@ Call Stack
   apply (<native>)
   <anonymous> (node_modules\react-native-css-interop\dist\runtime\wrap-jsx.js)
   WithDevTools (node_modules\expo\src\launch\withDevTools.tsx)
-  ```
+```
 
 - I will try to rebuild app first because I know for rn maps you need to rebuild I haven't done that yet. I also haven't gotten an API key but I think it should work without that, if after rebuild I get some other error I'll try to get an API key for google maps and if that doesn't work im going to have to ask claude. While that's building I need to find something else to work on aswell. I'll probably work on trying to get a profile picture functionality going.
 
@@ -1056,13 +1058,14 @@ Call Stack
 
 ```TypeScript
 {/* Basic info section */}
-          <BasicInfoSection 
+          <BasicInfoSection
             isEditing={isEditing}
             setIsEditing={setIsEditing}
           />
 ```
 
 - Then in my basic info file, I just passed the prop down like this:
+
 ```TypeScript
 interface stateTypes{
   isEditing: boolean,
@@ -1079,18 +1082,19 @@ const BasicInfoSection = ({isEditing,setIsEditing}: stateTypes) => {
 
 - Anyways, that's finished. Tomorrow, i'll have to rebuild app after adding api key for rn maps then I'll also try to finish off the frontend of the profile picture then connect to backend.
 
-## 28 OCT 25 
+## 28 OCT 25
 
 - Ok im rebuilding app right now after adding the api key, hopefully it'll work. Whilst thats going, let's try setting up profile picture more.
 
-- mann, it's not working. I got the api key, but I know its not working because I didn't enter my card details on gcp. Well, looks like 
-we're going to have to use expo maps instead 🤷‍♂️.
+- mann, it's not working. I got the api key, but I know its not working because I didn't enter my card details on gcp. Well, looks like
+  we're going to have to use expo maps instead 🤷‍♂️.
 
 - Ok, im on the profile picture part again and I need to rebuild my app again now. Whilst that's going I'll just go through some typescript video or do one of my assessments. Anyways, I think I will have to build again after I import expo maps, so I'll add expo maps then rebuild so I don't have to rebuild later.
 
 ## 29 OCT 25
 
 - So I added this "debug" log to test if the function on here was being called at all when we clicked the button:
+
 ```TypeScript
 const handleTakePhotos = async () => {
     console.log(`Function loaded`)
@@ -1128,7 +1132,7 @@ const handleTakePhotos = async () => {
 ## 30 OCT 25
 
 - Ok, I will see what I got up to yesterday and try to store user pfp in our profile function so it can be used accross site, easily.
-The logic sounds right to me, we handle all the profile picture stuff in the backend and then just display it in the frontend.
+  The logic sounds right to me, we handle all the profile picture stuff in the backend and then just display it in the frontend.
 
 - Ok since I had type: String, required: true i faced an error saying path/public id was missing, but I made the path and public Id optional, so now its working. Initially, there is no pfp field in our db. But if we add it then the pfp gets added on.
 
@@ -1138,9 +1142,10 @@ The logic sounds right to me, we handle all the profile picture stuff in the bac
 
 ```TypeScript
 source={require(user?.profilePicture.path)}
-````
+```
 
 - It gave me the error:
+
 ```bash
  ERROR  app\(tabs)\profile.tsx: app\(tabs)\profile.tsx:Invalid call at line 65: require(user?.profilePicture.path)
 Error: app\(tabs)\profile.tsx:Invalid call at line 65: require(user?.profilePicture.path)
@@ -1149,19 +1154,20 @@ Error: app\(tabs)\profile.tsx:Invalid call at line 65: require(user?.profilePict
 ```
 
 - apparently when the images are coming from like api calls, you have to use uri instead of require like this (this fixed problem):
+
 ```TypeScript
 source={{uri: user?.profilePicture.path}}
 ```
 
 - The profile picture logic is completely handled on the backend, just need to allow updates from frontend now and then profile picture functionality is done.
 
-- faaaak, there's some issues with permissions going on here and when it does work, it says Error occurred: [TypeError: Cannot read property 'data' of undefined]. I need to debug this after that the profile picture stuff is all done. I tried debugging with AI, kind of just messed me up, kind of helped me. Anyways, Im trying to do it on my own now, so I sent a request to the backend server the live one to update Pfp and I see error uploading to cloud, let's check cloudinary utils here and try to figure it out. But wait, it's kinda funny because it was working when I sent request to local host. Could it be because I tried uploading the same pfp? I'll try using a different one. Nvm, it's just saying error uploading to cloud. 
+- faaaak, there's some issues with permissions going on here and when it does work, it says Error occurred: [TypeError: Cannot read property 'data' of undefined]. I need to debug this after that the profile picture stuff is all done. I tried debugging with AI, kind of just messed me up, kind of helped me. Anyways, Im trying to do it on my own now, so I sent a request to the backend server the live one to update Pfp and I see error uploading to cloud, let's check cloudinary utils here and try to figure it out. But wait, it's kinda funny because it was working when I sent request to local host. Could it be because I tried uploading the same pfp? I'll try using a different one. Nvm, it's just saying error uploading to cloud.
 
 - Allright, finally caught the error:
 
 ![alt text](./images-for-log/image13.png)
 
-- idk why im getting this because I gave an api key. 
+- idk why im getting this because I gave an api key.
 
 - AHHHHHHHH,. thats why i get the fking error, because I haven't set my .env file on render with the updated values. This should solve problem, ok that's solved but im still getting the error when trying to do it through the app. Also idk there's some error in my node_modules file. Im trying to delete node_modules and just npm i to install it again. Let's see if it solves that problem at least. That did solve the problem. But idk render's not loading right now, maybe site traffic is high. So i'll leave it for now and work on my other project starting from today aswell. I need to test this tomorrow and hopefully get it working.
 
@@ -1170,6 +1176,7 @@ source={{uri: user?.profilePicture.path}}
 - I can update the username, email password using the same bakcend function. So I think its most definetly how Im handling form data in frontend.
 
 - he hey, I finally got it working. I added this in the api to specifcy we are getting formdata from backend and it worked (maybe im using react native that's why, because I don't remember needing to add this on web):
+
 ```TypeScript
 {headers:{
       "Content-Type" : "multipart/form-data"
@@ -1213,18 +1220,17 @@ source={{uri: user?.profilePicture.path}}
     await mutate(formdata);
     setChangePfpClicked(false);
   };
-```  
+```
 
 - so yeah i get api error, axios network error when I pass null through save image function. Lets ask claude and I may have to implement a seperate backend function for this just as a brute force solution. Yeah ill just add another function in backend for this.
 
-- hm ok so now when I try calling the deleteProfilePicture function idk it was showing cannot get property data of undefined. Yeah, that problem is fixed. So now the profile functionality is complete in the profile page. I thought i would be able to use this user.profilePicture for like the posts aswell, but then that'd just show the logged in users profile picture for all posts. I need to get that under control somehow when the time comes. 
+- hm ok so now when I try calling the deleteProfilePicture function idk it was showing cannot get property data of undefined. Yeah, that problem is fixed. So now the profile functionality is complete in the profile page. I thought i would be able to use this user.profilePicture for like the posts aswell, but then that'd just show the logged in users profile picture for all posts. I need to get that under control somehow when the time comes.
 
 - Ok i don't really know what I should work on right now. For expo maps I need the api key which I have to enter my card details for on gcp, im not doing that. I think i'll just spend some time collecting more images for my no landmark class then. I haven't been collecting any images recently, but it's fine no need to rush that process.
 
 - Im trying to fix this issue on andriod, you can do it using safe area view but I didn't like that. I just wanted to hide the bottom buttons and only make them appear when user swipes up, so I used expo navigation bar and added andriodnavigationBar visible sticky-immersive to my app.json:
 
 ![alt text](./images-for-log/image14.jpg)
-
 
 ## 1 Nov 25
 
@@ -1239,7 +1245,6 @@ source={{uri: user?.profilePicture.path}}
 ![alt text](./images-for-log/image15.png)
 
 - Ok, I got the bottom detection card setup of the tours page, all that's left is to change the style for that depending on state and also add the scan overlay + a little heading at the top.
-
 
 - The layout of tours page is complete for now:
 
@@ -1259,13 +1264,14 @@ source={{uri: user?.profilePicture.path}}
 
 - After another sesh im on 1900. 100 to go. I also need to go back and review the message I got on discord about anomaly detection etc.
 
-- Ok the dataset for no landmark class is done for now. With this dataset I should be able to get the model up and running but only be able to detect the one landmark for now. Now I shouldn't have to worry about grabbing images until I decide I want to introduce the virtual tours for other landmarks and I won't do that any time soon. I'll do it if I release the app otherwise no need to go through the pain of grabbing images for different landmarks. 
+- Ok the dataset for no landmark class is done for now. With this dataset I should be able to get the model up and running but only be able to detect the one landmark for now. Now I shouldn't have to worry about grabbing images until I decide I want to introduce the virtual tours for other landmarks and I won't do that any time soon. I'll do it if I release the app otherwise no need to go through the pain of grabbing images for different landmarks.
 
 - That's it for today, tomorrow I will re read the resposne I got about anomaly detection and how rerunning model every time I add more images to data set may cause accuracy to go down and most importantly, I have to confirm that it will actually work well with decent enough accuracy. Im aiming for 75%+ accuracy, i think it should be a reasonable target especially considering I've gotten 500 images for the landmark and 2k for no landmark. If this shit doesn't end up working at all, it's not gonna be a waste of time, it'll be a lesson for next time Im doing something similar. But, that shouldn't happen. It's just about maximising the accuracy of the model.
 
 ## 5 Nov 25
 
 - Ok I was reviewing those messages I got and yeah I get what the anomaly detection was for. Essientially, this is the flow my model should follow:
+
 ```bash
 User takes photo
     ↓
@@ -1279,13 +1285,13 @@ Stage 1: Is this ANY landmark?
 ```
 
 - This helps us with these two things:
-    Performance: Most photos won't be landmarks, so we avoid running expensive checks unnecessarily
-    Scalability: As you add more landmarks, you don't slow down the average case (non-landmark photos)
+  Performance: Most photos won't be landmarks, so we avoid running expensive checks unnecessarily
+  Scalability: As you add more landmarks, you don't slow down the average case (non-landmark photos)
 
 - What claude reccomends me doing is sticking to the way Im doing it for now and it's saying that I could build like a binary classifier e.g using images from all my landmarks combined into one folder and the other no landmark images folder. So then we can answer the question is this a landmark first then if it's a landmark we can go into seeing which landmark it is. However, I can also use true landmark detection using methods like Autoencoders, isolation forest, one class svm. I know the binary classifier is easier but I may have to go with the true anomaly detection methods just to learn and make it interesting. Plus I think it may help with the accuracy and is a lot more scalable that way we don't have to keep adding no landmark images because that can be anything.
 
 - Ok so I asked this question online and let's see what response I get, until then I guess I'll just have to look into anomaly detection more:
-![alt text](./images-for-log/image17.png)
+  ![alt text](./images-for-log/image17.png)
 
 - This guy named Krish Naik on youtube completely explained the concept of isolation forest, DBScan + local outlier factor and I understood it very well: https://www.youtube.com/watch?v=OS9xRGKfx4E
 
@@ -1305,7 +1311,7 @@ Another option is to use clustering techniques like k-means or DBSCAN to cluster
 
 - I will look into autoencoders, hopefully there is a tutorial from the same guy Krish Naik on youtube aswell. His explanations were really good. Ok by the end of today, I want to have a clear direction of what I need to do with my model. I think im almost there yet, I just need to do the anomaly detection using like an autoencoder or DBScan etc. but let me get more of an idea still.
 
-- Ok i found this sort of intro that basically explained what autoencoders were and how they worked with a good diagram from this video: https://www.youtube.com/watch?v=E1C8xY8rlVc I watched maybe 8 mins of this, it provided a general intro into how autoencoders work and specifically for anomaly detection. However, the video I need to help implemenent this is this one here which talks about how we can identify anomaly images using convolutional autoencoders: 260 - Identifying anomaly images using convolutional autoencoders: https://www.youtube.com/watch?v=q_tpFGHiRgg, right so within the first minute of this video the guy says if we have a binary classifier with good and bad images we'll get much more accuracy that way because we have images for both datasets. Hmm, ok, but let's keep watching this video. Alright, I didn't really understand that video and I think it's bound to make too many errors that way. Im watching this other one on LSTM but I think that's not really applicable to what im trying to do. 
+- Ok i found this sort of intro that basically explained what autoencoders were and how they worked with a good diagram from this video: https://www.youtube.com/watch?v=E1C8xY8rlVc I watched maybe 8 mins of this, it provided a general intro into how autoencoders work and specifically for anomaly detection. However, the video I need to help implemenent this is this one here which talks about how we can identify anomaly images using convolutional autoencoders: 260 - Identifying anomaly images using convolutional autoencoders: https://www.youtube.com/watch?v=q_tpFGHiRgg, right so within the first minute of this video the guy says if we have a binary classifier with good and bad images we'll get much more accuracy that way because we have images for both datasets. Hmm, ok, but let's keep watching this video. Alright, I didn't really understand that video and I think it's bound to make too many errors that way. Im watching this other one on LSTM but I think that's not really applicable to what im trying to do.
 
 - I realised this anomaly detection won't work right now, because I only have the 500 images of my one landmark not of many. So what I need to do is release the app with only the tour avaliable for my landmark A and then once I get everything else out of the way... e.g social media features etc. I can then focus on implementing the two stages with anomaly detection. I.e it will look like this:
 
@@ -1319,7 +1325,7 @@ Result: "Is this ANY landmark?" (Yes/No)
 Stage 2 (Classifier):
 Training data:
 ├── landmark_a/     # 500 images
-├── landmark_b/     # 500 images  
+├── landmark_b/     # 500 images
 └── landmark_c/     # 500 images
 
 Result: "Which landmark is it?" (A, B, or C)
@@ -1366,9 +1372,8 @@ Traceback (most recent call last):
     return _pywrap_file_io.IsDirectory(compat.path_to_bytes(path))
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 UnicodeDecodeError: 'utf-8' codec can't decode byte 0xed in position 76: invalid continuation byte
-(venv) PS C:\Users\ashut\Desktop\KTMVTour> 
+(venv) PS C:\Users\ashut\Desktop\KTMVTour>
 ```
-
 
 - Ok the model is trained and exported:
 
@@ -1398,7 +1403,7 @@ Epoch 10/10
  'no-landmark' 'no-landmark' 'no-landmark' 'no-landmark' 'no-landmark'
  'no-landmark' 'boudha-stupa' 'no-landmark' 'no-landmark' 'no-landmark'
  'no-landmark']
-``` 
+```
 
 - Also, I wrote a script to convert the exported model to tf lite and it's now done. The tf lite model size is 2.39 mb. I will need to import this tf lite model to my app later on.
 
@@ -1406,41 +1411,39 @@ Epoch 10/10
 
 ![alt text](./images-for-log/1.JPG) ![alt text](./images-for-log/2.JPG) ![alt text](./images-for-log/3.JPG) ![alt text](./images-for-log/4.jpg)
 
-- First test with image 1 : ~Expected output: no landmark, actual output: ~no landmark 
-- First test with image 2 : ~Expected output: no landmark, actual output: ~no landmark 
-- First test with image 3 : ~Expected output: no landmark, actual output: ~no landmark 
+- First test with image 1 : ~Expected output: no landmark, actual output: ~no landmark
+- First test with image 2 : ~Expected output: no landmark, actual output: ~no landmark
+- First test with image 3 : ~Expected output: no landmark, actual output: ~no landmark
 - First test with image 4 : ~Expected output: boudha stupa, actual output: ~boudha stupa
-
 
 - All tests working as expectedddddd. Ok this is a good sign. I need to rigourously test this. But it's a good sign the model is working and fairly accurate.
 
 ## 6 Nov 25
 
-- I probably won't be able to get much done today. However, if I start researching on things like redis, rate limitng, sql etc. it'll be good. If by the end of today I know where and how to implement another db aswell then i'll be happy as well as if I can implement rate limiting to actually prevent DDOS using express and if redis is usesful for my social media part of the app. 
-
+- I probably won't be able to get much done today. However, if I start researching on things like redis, rate limitng, sql etc. it'll be good. If by the end of today I know where and how to implement another db aswell then i'll be happy as well as if I can implement rate limiting to actually prevent DDOS using express and if redis is usesful for my social media part of the app.
 
 - Ok with the help of claude, I have built a checklist to help me implement these features:
-https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/edit?tab=t.0
+  https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/edit?tab=t.0
 
 - Ok, so I need to go over postgresql today. Maybe if I watch a tutorial on it today or tomorrow that'll be good. That's the first step. The first step for me is to learn postgresql, then set it up and then create my schemas for posts,photos,likes, comments with postgresql. Im also going to be using redis. So in the end I have these 3 dbs, and db handles what it does best
+
   - MongoDB = flexible user data
   - PostgreSQL = relational social feed data with integrity
   - Redis = fast caching and counters
 
 - I'll start the postgresql tutorial tomorrow. Today if I just spend some time getting photos of another landmark then that'll be good. I need to end up getting another 500 of whichever landmark B I choose, so if I get 50-100 today that'll be awesome.
 
-
 - I got a response to this question I asked on discord, and I ended up getting more of an idea on how I can make my app more secure. Try to attack the app to find its vulnurabilities and then fix those vulnuerabilities:
 
 ![alt text](./images-for-log/image18.png)
 
-
 ## 7 Nov 25
 
 - Today's task is to watch an intro to postgresql video and if I get around to it, trying to set it up. I'll also grab some images for landmark B for my model. Im on 105 right now, I want to get it to 200. Remember im still going through this checklist:
-https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/edit?tab=t.0#heading=h.k6ofso13lqk1
+  https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/edit?tab=t.0#heading=h.k6ofso13lqk1
 
 - Ok, so I get the architecture of my community/social media page. There will be one database lets call it KTMVTour_community and then inside that there will be four tables, posts, photos, likes comments.... and evrything is with connections so there aren't any bugs e.g users can't like photos 100 times, users can't like a post that doesn't exist... Here are examples of my connections:
+
   - Photos connect to Posts (via post_id)
   - Likes connect to Posts (via post_id)
   - Comments connect to Posts (via post_id)
@@ -1458,7 +1461,6 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 
 ![alt text](./images-for-log/image20.png)
 
-
 ## 8 Nov 25
 
 - I won't be able to work much today but if I can create the post option within the bottom pages navbar in the middle, that'll be good or find a way to include the post that'll be good. Also, maybe if I can deploy my postgres on render aswell, that'll be good.
@@ -1467,15 +1469,14 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 
 - But that's it for today, not feeling doing anything else.
 
-
 ## 9 NOV 25
 
-- I'll just connect the postgres to render first. Oh my goodness bro, this is what it says on here: Your database will expire on December 9, 2025. The database will be deleted unless you upgrade to a paid instance type. Alright, maybe for one month I'll just use this and then after that I'll need to figure out something else to do, or I may just pay $6 a month who knows let's see. Ok, so it's connected and I got the data in there for comments, posts, likes etc. Now I think the db is setup and I can just focus on the backend..., but let's see what the checklist says on that doc (link for it above), also I think i'll add redis at the end after I complete all this then I'll move onto the redis stuff. 
+- I'll just connect the postgres to render first. Oh my goodness bro, this is what it says on here: Your database will expire on December 9, 2025. The database will be deleted unless you upgrade to a paid instance type. Alright, maybe for one month I'll just use this and then after that I'll need to figure out something else to do, or I may just pay $6 a month who knows let's see. Ok, so it's connected and I got the data in there for comments, posts, likes etc. Now I think the db is setup and I can just focus on the backend..., but let's see what the checklist says on that doc (link for it above), also I think i'll add redis at the end after I complete all this then I'll move onto the redis stuff.
 
 - Ok im starting the backend for the posts. I'll create a function that let's users post with photos, a caption and obviously assign the post with user id.
 
 - Post function, model + routes all done. First post has been made on the app:
-![alt text](./images-for-log/image21.png)
+  ![alt text](./images-for-log/image21.png)
 
 ## 10 NOV 25
 
@@ -1499,7 +1500,6 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 
 ![alt text](./images-for-log/image23.png)
 
-
 - I also created the pagination utils file because we will need that for this section.
 
 - Now, i just need to get the user'id and combine the two databases, mongo and postgres to return one good return info section with everything about post and the user who posted it username, pfp and id then after that it's about implementing our controller which calls this getFeed function...
@@ -1507,7 +1507,6 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 - The controller is done, now let's test it out and make sure everything is working fine.
 
 - Everything is fine now im getting all the details I need. I may move onto some frontend today, like get the upload feature styling setup or maybe I'll just focus on some other things today... but I also want to get some more images for landmark b. Im about halfway there so I still need like another 250 and then it should be good enough to train the model on landmark b aswell.
-
 
 - In terms of the devops stuff, this is also what I need to do for this app (no rush on this though):
 
@@ -1518,8 +1517,7 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 - I got the docker file for backend setup, I also downloaded the docker application so I can test my docker file I setup in backend.
 
 - The backend has been successfully containerised:
-![alt text](./images-for-log/image25.png)
-
+  ![alt text](./images-for-log/image25.png)
 
 # 12 NOV 25
 
@@ -1528,21 +1526,22 @@ https://docs.google.com/document/d/11vjqltQXYW3H4Gp966JjoCyIQ2XJum_j1hBg5YprdIM/
 - I built the backend for like, unlike and checkifPost is liked within like an an hour/1.5 hour now let me just test is real quick to make sure everything is working fine.
 
 - Like endpoint working, the unlike route is saying this: Error handler caught: error: invalid input syntax for type uuid: post id, i'll have a look into this,
-but before that let me just see whats happening with the checkifLiked route. Ahh, it was working fine, I just had a typo in the url. Ok, so the backend for like is done. 
-Now let me just make some frontend for the community page. I think i'll handle the upload post in the frontend today.
+  but before that let me just see whats happening with the checkifLiked route. Ahh, it was working fine, I just had a typo in the url. Ok, so the backend for like is done.
+  Now let me just make some frontend for the community page. I think i'll handle the upload post in the frontend today.
 
-- I got started on it, but I allowed people to either take photo from library, but I realised I have to build the upload screen first anyways. So I have to let users add photos within that page and also captions. That's all you add when making a post right now. I won't bother adding hashtag features right now, but again if I want to implement a ML system to show a certain user a certain post (algorithm is it called?)  depending on their likes idk what else I could use besides hash tags, but that's for later. I just need to focus on getting the upload done from within the app and then move onto displaying the feed and then I can worry about likes and comments. After that I will just touch up some things within the home page, remove the map feature maybe and also the previewd posts and swap it for something different. Maybe trending landmarks instead? Which just works depending on the amount of scans a landmark has etc. but who knows, that's for later. My first priority is building this working upload page, and I'll get the frontend styling done tomorrow for it, if I can integrate the backend that'd be good too.
+- I got started on it, but I allowed people to either take photo from library, but I realised I have to build the upload screen first anyways. So I have to let users add photos within that page and also captions. That's all you add when making a post right now. I won't bother adding hashtag features right now, but again if I want to implement a ML system to show a certain user a certain post (algorithm is it called?) depending on their likes idk what else I could use besides hash tags, but that's for later. I just need to focus on getting the upload done from within the app and then move onto displaying the feed and then I can worry about likes and comments. After that I will just touch up some things within the home page, remove the map feature maybe and also the previewd posts and swap it for something different. Maybe trending landmarks instead? Which just works depending on the amount of scans a landmark has etc. but who knows, that's for later. My first priority is building this working upload page, and I'll get the frontend styling done tomorrow for it, if I can integrate the backend that'd be good too.
 
 ## 13 NOV 25
 
-- alright, after a bit of trial and error I finally got the upload posts working on the app. So I got the frontend done today + I connected the backend. The users can select multiple photos and post. I only tried with 3 images and it worked. So I haven't tried all possible cases... I also need to watch for  the extension in this:
+- alright, after a bit of trial and error I finally got the upload posts working on the app. So I got the frontend done today + I connected the backend. The users can select multiple photos and post. I only tried with 3 images and it worked. So I haven't tried all possible cases... I also need to watch for the extension in this:
+
 ```TypeScript
 formData.append("photos", {
         uri,
         name: `${Date.now()}_${index}.jpg`,
         type: "image/jpeg",
       } as any);
-```      
+```
 
 - I added a .jpg there because it said file format not found, but I think it'll throw error if user tries to upload png image even though png should be allowed. I need to fix that for tomorrow.
 
@@ -1573,6 +1572,7 @@ formData.append("photos", {
 - Ok, i kind of ran into many problems with this. But at the end I ended up using useInfiniteQuery from react query to load all the posts from our backend and flatList to make sure we don't load all posts all at once since that would be very inefficient if say we had 2000 posts then it would take so long to load the posts. So flat list helps with that problem by just loading a few of those 2000 at a time and as user scrolls we load more...
 
 - This is how I implemented it:
+
 ```TypeScript
 import { View, FlatList, ActivityIndicator, Dimensions } from "react-native";
 import React from "react";
@@ -1661,11 +1661,11 @@ export default Feed;
 
 ## 17 Nov 25
 
-- I'll just try to connect the like feature from backend to frontend today and then tomorrow I can work on the horizontal swipe part, after that it's comments and then redis. Also I'll try to grab some images for landmark B. 
+- I'll just try to connect the like feature from backend to frontend today and then tomorrow I can work on the horizontal swipe part, after that it's comments and then redis. Also I'll try to grab some images for landmark B.
 
 - The like functionality is added I guess, wasn't hard or anything but now the problem is how do I update the number of likes etc.
-without having the user reload the app... I think I have to use web sockets for that, or maybe there is an easier way out?? It'll 
-prolly be web sockets though most likely.
+  without having the user reload the app... I think I have to use web sockets for that, or maybe there is an easier way out?? It'll
+  prolly be web sockets though most likely.
 
 ## 18 NOV 25
 
@@ -1673,12 +1673,49 @@ prolly be web sockets though most likely.
 
 - Anyways, while scrolling through reels and stuff I now may've come to realise this sql database wasn't a good idea for posts. It would've been fine for storing the user profile data, but lets say someday somehow miraculously we get a lot of posts on the app, storing it as a JSON document using something like mongodb is better because our tables can't really work efficiently with all that data. The question just comes down how long can I stick with these tables for? Will it be fine to handle lets say hundreds of posts per day, thousdands, ten thousands.. when does it's efficiency fall off? Because for the MVP I think i can stick with the relational db. Maybe after launch I will change the backend for that to be in mongo. Anyways, it's fine for now let's just get the like counter increment going and then I will probably move onto the horizontal swipe for multiple photos today. If im not wrong, it's just that and then the comments to implement with web sockets + redis then the community/social feed component is done.
 
-
 - I installed the pager view and added it for horizontal swiping, but I gotta rebuild my app for it to take effect. In the mean time, I'll just do some other things...
 
 - The horizontal swipe is working. Pager View is working successfully what's left is to add the dots to the screen. I'll probably just do that tomorrow though and then from there it's about adding comments to the peice of code.
 
 - How it will work with the horizontal dots, is we have it return dots = length of photo urls array. So it should show like e.g 5 dots if there's 5 urls for one post. Then we can have a state that says, currentPage that starts at 0 index (1st element) and everytime we swipe right we increment by 1 and have the currentPage dot highlighted and everytime we swipe left we decrement by 1 and have the new currentPage highlighted.
 
-- That's one approach, but there's no way we can just track if user swiped left or right? Hmm, there is this thing called onPageSelected within React native, I think it may be useful for what im trying to do. My backend isn't even loading right now, 
-I think render is experiencing heavy traffic rn or something like that idk but it's not loading. Wait, what if I load my container then I created on docker, will it fix this problem? no nvm because that's running on local host and my frontend is connected to the deployed backend. Oh well, it's not working tn. I'll add the dots tomorrow.. shouldn't be too hard.
+- That's one approach, but there's no way we can just track if user swiped left or right? Hmm, there is this thing called onPageSelected within React native, I think it may be useful for what im trying to do. My backend isn't even loading right now,
+  I think render is experiencing heavy traffic rn or something like that idk but it's not loading. Wait, what if I load my container then I created on docker, will it fix this problem? no nvm because that's running on local host and my frontend is connected to the deployed backend. Oh well, it's not working tn. I'll add the dots tomorrow.. shouldn't be too hard.
+
+## 19 NOV 25
+
+- I got the dots and counter in there working, so it's good. It was pretty simple, i just added a state + the onPageSelected in pager view, and when I swiped to the right it automatically got the index I was at:
+
+```TypeScript
+const [currentImage, setCurrentImage] = useState<number>(0);
+<PagerView
+          style={{ flex: 1 }}
+          initialPage={0}
+          onPageSelected={(page) => setCurrentImage(page.nativeEvent.position)}
+        >
+```
+
+- Fast image isn't really working with react 19, it only supports 17/18. It does have a lot of weekly downloads but it was last maintained/updated 3 years ago. I'll stick with expo image, we can get the same thing working. If we have a useEffect hook and fetch the next/previous photos like this it'll work:
+```TypeScript
+  // Preload adjacent photos whenever currentImage changes
+  useEffect(() => {
+    const photosToPreload = [];
+    
+    // Preload previous photo if it exists
+    if (currentImage > 0) {
+      photosToPreload.push(photoUrls[currentImage - 1]);
+    }
+    
+    // Preload next photo if it exists
+    if (currentImage < photoUrls.length - 1) {
+      photosToPreload.push(photoUrls[currentImage + 1]);
+    }
+    
+    // Prefetch the adjacent images
+    if (photosToPreload.length > 0) {
+      Image.prefetch(photosToPreload);
+    }
+  }, [currentImage, photoUrls]);
+```
+
+- Alright, I got that in here, I think i need to rebuild my app though. Nah nvm. Anyways, this is complete enough for MVP. I'll move onto the comments backend now. and then implement the comments. Idk if I wrote on here but I don't need web sockets, cause it's not live comments like on twitch or titkok live. You can't see live comments on tiktok aswell on videos, only on live. The comments you see are just whats loaded when u load the video. Someone may've commented while you were watching that video. You won't be able to see it until you refresh.. So i just need the comments working and then idek if I should worry about redis rn. I can deal with that later when it comes to it. I just want to get the landmark detection model implemented within the app and then from there is should be soon ready for launch and i'll continue adding features after launch.
