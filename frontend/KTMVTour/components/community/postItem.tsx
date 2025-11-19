@@ -28,6 +28,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 const PostItem = ({ post }: PostItemProps) => {
   const [isCaptionExpanded, setIsCaptionExpanded] = useState(false);
+  const [currentImage, setCurrentImage] = useState<number>(0);
   const insets = useSafeAreaInsets();
 
   const photoUrls = post.photos.map((photo: any) => photo.url);
@@ -36,11 +37,15 @@ const PostItem = ({ post }: PostItemProps) => {
     <View style={{ height: screenHeight }}>
       {/* Main image section - Full screen */}
       <View className="absolute inset-0">
-        <PagerView style={{ flex: 1 }} initialPage={0}>
-          {photoUrls.map((url,index) => (
+        <PagerView
+          style={{ flex: 1 }}
+          initialPage={0}
+          onPageSelected={(page) => setCurrentImage(page.nativeEvent.position)}
+        >
+          {photoUrls.map((url, index) => (
             <View key={index}>
               <Image
-                source={{ uri: url}}
+                source={{ uri: url }}
                 style={{
                   width: screenWidth,
                   height: screenHeight,
@@ -50,12 +55,29 @@ const PostItem = ({ post }: PostItemProps) => {
             </View>
           ))}
         </PagerView>
+
+        {post.photos.length > 1 && (
+          <View className="absolute bottom-[20%] left-0 right-0 flex-row justify-center gap-1.5">
+            {post.photos.map((_: any, i: number) => (
+              <View
+                key={i}
+                className="rounded-full"
+                style={{
+                  width: i === currentImage ? 8 : 6,
+                  height: i === currentImage ? 8 : 6,
+                  backgroundColor:
+                    i === currentImage ? "#fff" : "rgba(255,255,255,0.5)",
+                }}
+              />
+            ))}
+          </View>
+        )}
       </View>
 
       {/* Header Section - Overlay on top */}
-      <View className="absolute top-0 left-0 right-0 flex flex-row items-center justify-between pr-4 pt-8 z-10">
-        <View className="flex-row gap-2 items-center pl-2">
-          {/* profile pictrue */}
+      <View className="absolute top-0 left-0 right-0 flex flex-row items-center justify-between px-4 pt-8 z-10">
+        <View className="flex-row gap-2 items-center">
+          {/* profile picture */}
           <View className="w-12 bg-third rounded-full border-2 border-secondary items-center">
             {post.user?.profilePicture?.path ? (
               <Image
@@ -94,7 +116,20 @@ const PostItem = ({ post }: PostItemProps) => {
           </View>
         </View>
 
-        <AddPostButton />
+        <View className="flex-row items-center gap-2">
+          {/* Image counter e.g 1/4, 3/4 etc.. */}
+          {post.photos.length > 1 && (
+            <View
+              className="px-3 py-1 rounded-full"
+              style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
+            >
+              <Text className="text-white text-sm font-semibold">
+                {currentImage + 1}/{post.photos.length}
+              </Text>
+            </View>
+          )}
+          <AddPostButton />
+        </View>
       </View>
 
       {/* Like + comment + share buttons */}
