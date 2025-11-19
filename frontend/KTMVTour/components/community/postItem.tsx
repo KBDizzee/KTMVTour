@@ -1,5 +1,6 @@
-import { View, Text, Dimensions, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import { View, Text, Dimensions, TouchableOpacity } from "react-native";
+import { Image } from "expo-image";
+import React, { useEffect, useState } from "react";
 import { MapPin, MessageCircle, Share2 } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import PagerView from "react-native-pager-view";
@@ -33,6 +34,26 @@ const PostItem = ({ post }: PostItemProps) => {
 
   const photoUrls = post.photos.map((photo: any) => photo.url);
 
+  // Preload adjacent photos whenever currentImage changes using expo image. This is to make the ux smoother/faster.
+  useEffect(() => {
+    const photosToPreload = [];
+
+    // Preload previous photo if it exists
+    if (currentImage > 0) {
+      photosToPreload.push(photoUrls[currentImage - 1]);
+    }
+
+    // Preload next photo if it exists
+    if (currentImage < photoUrls.length - 1) {
+      photosToPreload.push(photoUrls[currentImage + 1]);
+    }
+
+    // Prefetch the adjacent images
+    if (photosToPreload.length > 0) {
+      Image.prefetch(photosToPreload);
+    }
+  }, [currentImage, photoUrls]);
+
   return (
     <View style={{ height: screenHeight }}>
       {/* Main image section - Full screen */}
@@ -49,8 +70,10 @@ const PostItem = ({ post }: PostItemProps) => {
                 style={{
                   width: screenWidth,
                   height: screenHeight,
-                  resizeMode: "cover",
                 }}
+                contentFit="cover"
+                priority="high"
+                cachePolicy="memory-disk"
               />
             </View>
           ))}
@@ -86,8 +109,9 @@ const PostItem = ({ post }: PostItemProps) => {
                   width: 40,
                   height: 40,
                   borderRadius: 50,
-                  resizeMode: "cover",
                 }}
+                contentFit="cover"
+                cachePolicy="memory-disk"
               />
             ) : (
               <Image
@@ -96,8 +120,8 @@ const PostItem = ({ post }: PostItemProps) => {
                   width: 40,
                   height: 40,
                   borderRadius: 50,
-                  resizeMode: "cover",
                 }}
+                contentFit="cover"
               />
             )}
           </View>
