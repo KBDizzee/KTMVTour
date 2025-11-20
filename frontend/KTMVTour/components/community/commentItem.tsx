@@ -1,6 +1,9 @@
 import { View, Text } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
 
 interface CommentItemType {
   data: any;
@@ -29,7 +32,7 @@ const CommentItem = ({ data }: CommentItemType) => {
 
           {/* Timestamp */}
           <View className="mt-2 ml-2">
-            <Text className="text-gray-500 text-sm">{data.createdAt}</Text>
+            <Text className="text-gray-500 text-sm">{dayjs(data.createdAt).fromNow()}</Text>
           </View>
         </View>
       </View>
