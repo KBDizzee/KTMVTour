@@ -24,11 +24,12 @@ interface PostItemProps {
       };
     };
   };
+  itemHeight:number;
 }
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+const {width:screenWidth} = Dimensions.get("window")
 
-const PostItem = ({ post }: PostItemProps) => {
+const PostItem = ({ post, itemHeight }: PostItemProps) => {
   const [isCaptionExpanded, setIsCaptionExpanded] = useState(false);
   const [currentImage, setCurrentImage] = useState<number>(0);
   const insets = useSafeAreaInsets();
@@ -56,7 +57,7 @@ const PostItem = ({ post }: PostItemProps) => {
   }, [currentImage, photoUrls]);
 
   return (
-    <View style={{ height: screenHeight }}>
+    <View style={{ height: itemHeight }}>
       {/* Main image section - Full screen */}
       <View className="absolute inset-0">
         <PagerView
@@ -70,7 +71,7 @@ const PostItem = ({ post }: PostItemProps) => {
                 source={{ uri: url }}
                 style={{
                   width: screenWidth,
-                  height: screenHeight,
+                  height: itemHeight,
                 }}
                 contentFit="cover"
                 priority="high"
@@ -173,7 +174,7 @@ const PostItem = ({ post }: PostItemProps) => {
 
       {/* Caption Section */}
       <View
-        className="flex absolute bottom-0 left-0 w-[90vw] p-4"
+        className="flex absolute bottom-[2%] left-0 w-[90vw] p-4"
         style={{ paddingBottom: insets.bottom }}
       >
         <TouchableOpacity

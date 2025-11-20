@@ -3,6 +3,7 @@ import React from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { feedAPI } from "@/src/api/feed.api";
 import PostItem from "./postItem";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const screenHeight = Dimensions.get("window").height;
 
@@ -55,16 +56,20 @@ const Feed = () => {
     );
   }
 
+  const insets = useSafeAreaInsets();
+  const tabBarHeight = 70
+  const availableHeight = screenHeight - tabBarHeight - insets.bottom;
+
   return (
     <View className="flex-1">
       <FlatList
         data={allPosts}
-        renderItem={({ item }: { item: any }) => <PostItem post={item} />}
+        renderItem={({ item }: { item: any }) => <PostItem post={item} itemHeight={availableHeight}/>}
         keyExtractor={(item: any) => item.id}
         getItemLayout={getItemLayout}
         // Vertical paging:
         pagingEnabled={true}
-        snapToInterval={screenHeight}
+        snapToInterval={availableHeight}
         decelerationRate="fast"
         showsVerticalScrollIndicator={false}
         // Load more posts:
@@ -74,7 +79,7 @@ const Feed = () => {
         ListFooterComponent={
           isFetchingNextPage ? (
             <View
-              style={{ height: screenHeight }}
+              style={{ height: availableHeight }}
               className="items-center justify-center"
             >
               <ActivityIndicator size="large" color="#8B5CF6" />

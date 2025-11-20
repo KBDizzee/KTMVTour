@@ -2,10 +2,10 @@ import { Image, View } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
 import { Plus } from "lucide-react-native";
-// import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const layout = () => {
-  // const insets = useSafeAreaInsets()
+  const insets = useSafeAreaInsets()
   return (
     <Tabs
       screenOptions={{
@@ -13,8 +13,8 @@ const layout = () => {
           backgroundColor: "#1C1C1E",
           borderColor: "#3A3A3C",
           paddingTop: 7,
-          // paddingBottom: insets.bottom,
-          // height: 60 + insets.bottom
+          paddingBottom: insets.bottom,
+          height: 70 + insets.bottom
         },
         tabBarLabelStyle: {
           fontSize: 13,
