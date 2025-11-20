@@ -78,7 +78,7 @@ const CommentsSheet = ({ post }: postCommentType) => {
       </FlatList>
 
       {/* Post comment component */}
-      <PostComment />
+      <PostComment post={post} />
     </View>
   );
 };
