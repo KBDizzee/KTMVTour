@@ -1733,3 +1733,7 @@ const [currentImage, setCurrentImage] = useState<number>(0);
 - I completely forgot I needed an api to fetch the all the comments for posts, so I added that API and all comments are being fetched. Now I need to load it into frontend. I think I will also have to use flatlist, like for loading posts. I have the pagination limit set to 20. SO it loads 20 comments. I think flatlist is the way to go for these comments..
 
 - I'll add that quickly tomorrow. I'll have claude help with some frontend styling, the parts I already know to speed up the process.
+
+## 20 Nov 25
+
+- I got the comments working. Im almost done with the social media part. What I need to do now is when user comments, I need to show their comment instantaneously on the screen so they know they've commented
