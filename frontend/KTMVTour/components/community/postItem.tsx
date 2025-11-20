@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import PagerView from "react-native-pager-view";
 import AddPostButton from "./addPostButton";
 import LikeComponent from "./likeComponent";
+import CommentComponent from "./commentComponent";
 
 interface PostItemProps {
   post: {
@@ -99,7 +100,7 @@ const PostItem = ({ post }: PostItemProps) => {
 
       {/* Header Section - Overlay on top */}
       <View className="absolute top-0 left-0 right-0 flex flex-row items-center justify-between px-4 pt-8 z-10">
-        <View className="flex-row gap-2 items-center">
+        <View className="flex-row gap-2 items-center bg-black/10 rounded-xl p-2">
           {/* profile picture */}
           <View className="w-12 bg-third rounded-full border-2 border-secondary items-center">
             {post.user?.profilePicture?.path ? (
@@ -160,15 +161,7 @@ const PostItem = ({ post }: PostItemProps) => {
       <View className="flex absolute right-0 bottom-[35%] p-3 gap-6">
         <LikeComponent post={post} />
 
-        <View className="flex items-center">
-          <TouchableOpacity
-            className="w-12 h-12 rounded-full bg-black/40 backdrop-blur-sm items-center justify-center"
-            activeOpacity={0.7}
-          >
-            <MessageCircle color="#ffffff" size={24} fill="none" />
-          </TouchableOpacity>
-          <Text className="text-white">{post.commentCount || 0}</Text>
-        </View>
+        <CommentComponent post={post}/>
 
         <TouchableOpacity
           className="w-12 h-12 rounded-full bg-black/40 backdrop-blur-sm items-center justify-center"
