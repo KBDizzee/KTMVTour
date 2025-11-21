@@ -1737,3 +1737,8 @@ const [currentImage, setCurrentImage] = useState<number>(0);
 ## 20 Nov 25
 
 - I got the comments working. Im almost done with the social media part. What I need to do now is when user comments, I need to show their comment instantaneously on the screen so they know they've commented
+
+## 21 Nov 25
+
+- I got that part done with optimistic update using onMutate avaliable within tanstack query.
+- I actually don't even know what else is left on the Social media part besides caching. I think it's almost complete.
