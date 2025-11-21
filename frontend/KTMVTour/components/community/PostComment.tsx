@@ -2,12 +2,13 @@ import { View, TextInput, TouchableOpacity } from "react-native";
 import React from "react";
 import { Send } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postCommentsAPI } from "@/src/api/comments.api";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { commentSchema } from "@/src/schema/comment.schema";
 import Toast from "react-native-toast-message";
+import { useAuthStore } from "@/src/store/auth.store";
 
 interface postType {
   post: {
@@ -21,8 +22,10 @@ export interface ICommentData {
 
 const PostComment = ({ post }: postType) => {
   const insets = useSafeAreaInsets();
+  const queryClient = useQueryClient();
+  const { user } = useAuthStore();
 
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control,reset } = useForm({
     defaultValues: {
       content: "",
     },
@@ -30,27 +33,68 @@ const PostComment = ({ post }: postType) => {
     mode: "all",
   });
 
-  const { mutate,isPending } = useMutation({
-    mutationFn: (data:ICommentData) => postCommentsAPI(post.id,data),
+  const { mutate, isPending } = useMutation({
+    mutationFn: (data: ICommentData) => postCommentsAPI(post.id, data),
     mutationKey: ["post_Comment_API"],
-    onSuccess: (response) => {
+    onMutate: async (newComment) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["get_comments", post.id] });
+
+      // Snapshot the previous value
+      const previousComments = queryClient.getQueryData([
+        "get_comments",
+        post.id,
+      ]);
+
+      // Optimistically update with new comment
+      queryClient.setQueryData(["get_comments", post.id], (old: any) => {
+        if (!old) return old;
+
+        // Create optimistic comment
+        const optimisticComment = {
+          id: `temp-${Date.now()}`,
+          content: newComment.content,
+          createdAt: new Date().toISOString(),
+          user: {
+            username: user?.username ?? "You",
+            profilePicture: user?.profilePicture?.path,
+          },
+        };
+
+        // Add to first page
+        return {
+          ...old,
+          pages: old.pages.map((page: any, i: number) =>
+            i === 0
+              ? { ...page, data: [optimisticComment, ...page.data] }
+              : page
+          ),
+        };
+      });
+
+      return { previousComments };
+    },
+    onError: (err, newComment, context) => {
+      // Rollback on error
+      queryClient.setQueryData(
+        ["get_comments", post.id],
+        context?.previousComments
+      );
       Toast.show({
-        type: "success",
-        text1: response.message ?? "Successfully Commented",
+        type: "error",
+        text1: err?.message ?? "Couldn't upload that comment",
         position: "top",
       });
     },
-    onError: (err) => {
-      Toast.show({
-        type: "error",
-        text1: err?.message ?? "Coudln't upload that comment",
-        position: "top",
-      });
+    onSuccess: (response) => {
+      // Refetch to get real data from server
+      queryClient.invalidateQueries({ queryKey: ["get_comments", post.id] });
     },
   });
 
-  const onSubmit = async(data: ICommentData) => {
+  const onSubmit = async (data: ICommentData) => {
     await mutate(data);
+    reset()
   };
 
   return (

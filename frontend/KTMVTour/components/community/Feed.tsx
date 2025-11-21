@@ -8,6 +8,11 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const screenHeight = Dimensions.get("window").height;
 
 const Feed = () => {
+  
+  const insets = useSafeAreaInsets();
+  const tabBarHeight = 70
+  const availableHeight = screenHeight - tabBarHeight - insets.bottom;
+  
   const {
     data,
     isPending,
@@ -55,10 +60,6 @@ const Feed = () => {
       </View>
     );
   }
-
-  const insets = useSafeAreaInsets();
-  const tabBarHeight = 70
-  const availableHeight = screenHeight - tabBarHeight - insets.bottom;
 
   return (
     <View className="flex-1">
