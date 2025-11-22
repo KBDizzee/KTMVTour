@@ -5,7 +5,7 @@ import {
   useCameraDevice,
   useCameraPermission,
 } from "react-native-vision-camera";
-import { Info, MapPin, LucideDot, Sparkles } from "lucide-react-native";
+import { Info, MapPin, LucideDot, Sparkles, XCircle } from "lucide-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { loadTensorflowModel, TensorflowModel } from "react-native-fast-tflite";
 import RNFS from "react-native-fs";
@@ -19,7 +19,7 @@ const tours = () => {
 
   const [detected, setdetected] = useState(false);
   const [detectedLandmark, setDetectedLandmark] = useState("");
-  // const [confidence, setConfidence] = useState(0);
+  const [noLandmarkDetected, setNoLandmarkDetected] = useState(false);
   const [model, setModel] = useState<TensorflowModel | null>(null);
   const [isModelLoaded, setIsModelLoaded] = useState(false);
 
@@ -101,16 +101,45 @@ const tours = () => {
 
       // update state w results:
       if (results && results.length > 0) {
-        setdetected(true);
+        // Get the output tensor
+        const output = results[0];
+
+        // Find the index with highest value
+        let maxIndex = 0;
+        let maxValue = output[0];
+
+        for (let i = 1; i < output.length; i++) {
+          if (output[i] > maxValue) {
+            maxValue = output[i];
+            maxIndex = i;
+          }
+        }
+
+        // Define your landmark labels
+        const landmarkLabels = ["Boudha-stupa", "no-landmark"];
+
+        const detectedLabel = landmarkLabels[maxIndex];
+
+        if (detectedLabel === "no-landmark") {
+          setdetected(false);
+          setDetectedLandmark("");
+          setNoLandmarkDetected(true)
+        } else {
+          setdetected(true);
+          setDetectedLandmark(detectedLabel);
+          setNoLandmarkDetected(false)
+        }
       } else {
         setdetected(false);
+        setDetectedLandmark("");
+        setNoLandmarkDetected(false)
       }
-      console.log("all results:", results);
 
       // Clean up the temporary photo file
       await RNFS.unlink(photo.path);
     } catch (err: any) {
       setdetected(false);
+      setNoLandmarkDetected(false);
     }
   };
   if (hasPermission == null || !isModelLoaded) {
@@ -168,6 +197,18 @@ const tours = () => {
             </Text>
           </View>
         </View>
+
+        {/* No Landmark Indicator */}
+        {noLandmarkDetected && (
+          <View className="items-center mb-6">
+            <View className="bg-red-500/20 border border-red-500/50 rounded-xl flex-row items-center gap-2 px-4 py-2">
+              <XCircle color={"#EF4444"} size={18} />
+              <Text className="text-red-400 font-medium">
+                No landmark detected
+              </Text>
+            </View>
+          </View>
+        )}
 
         {/* Scan area overlay */}
         <View style={{ width: "90%", aspectRatio: 1, position: "relative" }}>
@@ -272,7 +313,7 @@ const tours = () => {
 
             <View className="items-center justify-center mb-1">
               <Text className="text-secondary font-semibold text-xl items-center">
-                {detectedLandmark}
+                Detected Landmark: {detectedLandmark}
               </Text>
             </View>
 
