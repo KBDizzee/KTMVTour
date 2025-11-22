@@ -1,5 +1,5 @@
 import { View, Text, ActivityIndicator, Modal, Pressable } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Camera,
   useCameraDevice,
@@ -7,12 +7,21 @@ import {
 } from "react-native-vision-camera";
 import { Info, MapPin, LucideDot, Sparkles } from "lucide-react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { loadTensorflowModel, TensorflowModel } from "react-native-fast-tflite";
+import RNFS from "react-native-fs";
 
 const tours = () => {
   const device = useCameraDevice("back");
 
   const { hasPermission, requestPermission } = useCameraPermission();
+  const cameraRef = useRef<Camera>(null);
+  const intervalRef = useRef<any>(null);
+
   const [detected, setdetected] = useState(false);
+  const [detectedLandmark, setDetectedLandmark] = useState("");
+  // const [confidence, setConfidence] = useState(0);
+  const [model, setModel] = useState<TensorflowModel | null>(null);
+  const [isModelLoaded, setIsModelLoaded] = useState(false);
 
   //useEffect hook in React is a built-in hook that allows functional components to perform "side effects."
   //Side effects are operations that interact with the outside world or affect things beyond the component's direct rendering, such as:
@@ -24,12 +33,93 @@ const tours = () => {
     if (!hasPermission) {
       requestPermission();
     }
+    loadModel();
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, [hasPermission]);
 
-  if (hasPermission == null) {
+  useEffect(() => {
+    // Start capturing frames once model is loaded
+    if (isModelLoaded && hasPermission) {
+      startFrameCapture();
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isModelLoaded, hasPermission]);
+
+  const loadModel = async () => {
+    try {
+      const modelPath = require("../../assets/model/model.tflite");
+      const loadedModel = await loadTensorflowModel(modelPath);
+
+      setModel(loadedModel);
+      setIsModelLoaded(true);
+      console.log("model loaded successfully");
+    } catch (err: any) {
+      console.error("err loading model:", err);
+    }
+  };
+
+  const startFrameCapture = () => {
+    // Capture n process frame every 1.5 sec:
+    intervalRef.current = setInterval(() => {
+      captureAndClassify();
+    }, 1500);
+  };
+
+  const captureAndClassify = async () => {
+    if (!cameraRef.current || !model || !isModelLoaded) return;
+
+    try {
+      // Take photo from camera
+      const photo = await cameraRef.current.takePhoto({
+        flash: "off",
+        enableShutterSound: false,
+      });
+
+      // Run model on captured image:
+      // Read the image file as base64
+      const base64Image = await RNFS.readFile(photo.path, "base64");
+
+      // Convert base64 to Uint8Array
+      const binaryString = atob(base64Image);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+
+      // Run model with the typed array
+      const results = await model.run([bytes]);
+
+      // update state w results:
+      if (results && results.length > 0) {
+        setdetected(true);
+      } else {
+        setdetected(false);
+      }
+      console.log("all results:", results);
+
+      // Clean up the temporary photo file
+      await RNFS.unlink(photo.path);
+    } catch (err: any) {
+      setdetected(false);
+    }
+  };
+  if (hasPermission == null || !isModelLoaded) {
     return (
       <View className="flex items-center justify-center h-screen bg-black">
         <ActivityIndicator size={"large"} color={"#8B5CF6"} />
+        <Text className="text-white mt-4">
+          {!isModelLoaded ? "Loading model..." : "Requesting permissions..."}
+        </Text>
       </View>
     );
   }
@@ -60,8 +150,10 @@ const tours = () => {
       {/* { hasPermission && <Text className="text-3xl font-bold text-white mt-14 mb-6 text-center">Scan a landmark to receive a Virtual Tour!</Text>} */}
       <View style={{ position: "absolute", inset: 0 }}>
         <Camera
+          ref={cameraRef}
           device={device}
           isActive={true}
+          photo={true}
           style={{ height: "100%", width: "100%" }}
         />
       </View>
@@ -180,7 +272,7 @@ const tours = () => {
 
             <View className="items-center justify-center mb-1">
               <Text className="text-secondary font-semibold text-xl items-center">
-                Boudhanath Stupa
+                {detectedLandmark}
               </Text>
             </View>
 
