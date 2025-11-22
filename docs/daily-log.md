@@ -1696,21 +1696,22 @@ const [currentImage, setCurrentImage] = useState<number>(0);
 ```
 
 - Fast image isn't really working with react 19, it only supports 17/18. It does have a lot of weekly downloads but it was last maintained/updated 3 years ago. I'll stick with expo image, we can get the same thing working. If we have a useEffect hook and fetch the next/previous photos like this it'll work:
+
 ```TypeScript
   // Preload adjacent photos whenever currentImage changes
   useEffect(() => {
     const photosToPreload = [];
-    
+
     // Preload previous photo if it exists
     if (currentImage > 0) {
       photosToPreload.push(photoUrls[currentImage - 1]);
     }
-    
+
     // Preload next photo if it exists
     if (currentImage < photoUrls.length - 1) {
       photosToPreload.push(photoUrls[currentImage + 1]);
     }
-    
+
     // Prefetch the adjacent images
     if (photosToPreload.length > 0) {
       Image.prefetch(photosToPreload);
@@ -1742,3 +1743,134 @@ const [currentImage, setCurrentImage] = useState<number>(0);
 
 - I got that part done with optimistic update using onMutate avaliable within tanstack query.
 - I actually don't even know what else is left on the Social media part besides caching. I think it's almost complete.
+
+## 22 NOV 25
+
+- Trying to connect the model to my app. The model's been connected. I just used the fast tf lite react native library from mrousavy and react native fn aswell to prevent memory leak/battery being drained too quick. I used it e.g so when user gets out of the tours page the model closes so it doesn't drain too much of the battery etc.
+
+- Most of the implementation is just here in this part:
+
+```TypeScript
+ const { hasPermission, requestPermission } = useCameraPermission();
+  const cameraRef = useRef<Camera>(null);
+  const intervalRef = useRef<any>(null);
+
+  const [detected, setdetected] = useState(false);
+  const [detectedLandmark, setDetectedLandmark] = useState("");
+  const [noLandmarkDetected, setNoLandmarkDetected] = useState(false);
+  const [model, setModel] = useState<TensorflowModel | null>(null);
+  const [isModelLoaded, setIsModelLoaded] = useState(false);
+useEffect(() => {
+    if (!hasPermission) {
+      requestPermission();
+    }
+    loadModel();
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [hasPermission]);
+
+  useEffect(() => {
+    // Start capturing frames once model is loaded
+    if (isModelLoaded && hasPermission) {
+      startFrameCapture();
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isModelLoaded, hasPermission]);
+
+  const loadModel = async () => {
+    try {
+      const modelPath = require("../../assets/model/model.tflite");
+      const loadedModel = await loadTensorflowModel(modelPath);
+
+      setModel(loadedModel);
+      setIsModelLoaded(true);
+      console.log("model loaded successfully");
+    } catch (err: any) {
+      console.error("err loading model:", err);
+    }
+  };
+
+  const startFrameCapture = () => {
+    // Capture n process frame every 1.5 sec:
+    intervalRef.current = setInterval(() => {
+      captureAndClassify();
+    }, 1500);
+  };
+
+  const captureAndClassify = async () => {
+    if (!cameraRef.current || !model || !isModelLoaded) return;
+
+    try {
+      // Take photo from camera
+      const photo = await cameraRef.current.takePhoto({
+        flash: "off",
+        enableShutterSound: false,
+      });
+
+      // Run model on captured image:
+      // Read the image file as base64
+      const base64Image = await RNFS.readFile(photo.path, "base64");
+
+      // Convert base64 to Uint8Array
+      const binaryString = atob(base64Image);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+
+      // Run model with the typed array
+      const results = await model.run([bytes]);
+
+      // update state w results:
+      if (results && results.length > 0) {
+        // Get the output tensor
+        const output = results[0];
+
+        // Find the index with highest value
+        let maxIndex = 0;
+        let maxValue = output[0];
+
+        for (let i = 1; i < output.length; i++) {
+          if (output[i] > maxValue) {
+            maxValue = output[i];
+            maxIndex = i;
+          }
+        }
+
+        // Define your landmark labels
+        const landmarkLabels = ["Boudha-stupa", "no-landmark"];
+
+        const detectedLabel = landmarkLabels[maxIndex];
+
+        if (detectedLabel === "no-landmark") {
+          setdetected(false);
+          setDetectedLandmark("");
+          setNoLandmarkDetected(true)
+        } else {
+          setdetected(true);
+          setDetectedLandmark(detectedLabel);
+          setNoLandmarkDetected(false)
+        }
+      } else {
+        setdetected(false);
+        setDetectedLandmark("");
+        setNoLandmarkDetected(false)
+      }
+
+      // Clean up the temporary photo file
+      await RNFS.unlink(photo.path);
+    } catch (err: any) {
+      setdetected(false);
+      setNoLandmarkDetected(false);
+    }
+  };
+```
