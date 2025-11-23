@@ -1874,3 +1874,18 @@ useEffect(() => {
     }
   };
 ```
+
+- Allright, I need to test this out with some pictures. Im not even gonna add the location check thing to make sure user is within
+a certain distance from the landmark to actually say the landmark detected for now. I think I should just create an alert to say this is only avaliable for landmark A right now and im working very hard to get it working for other landmarks aswell. But I also need to go and start creating the videos for the virtual tours. They have to be real good aswell, i gotta put some editing into them. I think if they're around a min long then that should be good.
+
+- After this I need to touch up on the home page and get the redis + security up for sure. Thne mvp should be good to release.
+
+## 23 Nov 25
+
+- Today I want to work on the home page, because after that the app is basically ready for release.
+
+- I kind of have an idea for th ehome page. I want videos to be playing on it aswell, idk how size efficient that is though but I tink I can do it well.
+
+- The hero section's been redisgned completely with animations, a video in the back etc:
+
+![alt text](./images-for-log/image27.png)
