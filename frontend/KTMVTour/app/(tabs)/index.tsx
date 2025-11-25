@@ -5,6 +5,9 @@ import ShareExperienceCard from "../../components/landing/share-experience.card"
 import CategoryCards from "../../components/landing/historical&temples.cards";
 import Video from "react-native-video";
 import { useRef } from "react";
+import PopularDestinations from "@/components/landing/popularDestinations";
+import Features from "@/components/landing/features";
+import ShareExperienceCTA from "@/components/landing/shareExperienceCTA";
 
 const { height } = Dimensions.get("window");
 
@@ -47,13 +50,13 @@ export default function Index() {
 
       <View className="flex-1 items-center bg-black pb-8">
         {/* Take me to landmark card */}
-        <TakeToLandmark />
+        <TakeToLandmark scrollY={scrollY} />
 
-        {/* Share your experience {post/checkIn} card */}
-        <ShareExperienceCard />
+        <PopularDestinations scrollY={scrollY} />
 
-        {/* Category Cards */}
-        <CategoryCards />
+        <Features scrollY={scrollY} />
+        <ShareExperienceCTA scrollY={scrollY} />
+        
       </View>
     </Animated.ScrollView>
   );
