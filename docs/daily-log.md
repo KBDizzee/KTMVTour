@@ -1891,8 +1891,12 @@ a certain distance from the landmark to actually say the landmark detected for n
 ![alt text](./images-for-log/image27.png)
 
 
-## 24 Nov 25
+## 25 Nov 25
 
 - The home page is finished aswell now. So now it's about adding redis to the community/social media part, rate limiting seeing how cloudflare could work with this OAuth2 etc.. these security principles, testing the model to make sure it's working irl, adding the videos for the model and also adding the alert to let users know of the avaliable landmarks that have tours. I also need to have someone go through this to make sure it's fine.
 
 - Ah I also forgot about the recent activity thing on profile page. I either need to replace that with something else or just add a message saying feature coming soon.
+
+## 26 NOV 25
+
+- I need to buy a domain for my backend server before I can put it through cloudflare. In the mean time, I guess I can only focus on redis (caching) and trying to add some rate limiting with express rate limiter.
